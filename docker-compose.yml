@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # ============ REDIS ============
+  redis:
+    image: redis:7.2-alpine
+    container_name: emosync_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - emosync_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============ REDIS INSIGHT (GUI) ============
+  redis-insight:
+    image: redislabs/redisinsight:latest
+    container_name: emosync_redis_insight
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis_insight_data:/db
+    depends_on:
+      - redis
+    networks:
+      - emosync_network
+
+  # ============ MYSQL ============
+  mysql:
+    image: mysql:8.0
+    container_name: emosync_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: emosync
+      MYSQL_USER: emosync
+      MYSQL_PASSWORD: emosync123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - emosync_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============ PHP MY ADMIN ============
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: emosync_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 100M
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - emosync_network
+
+  # ============ LARAVEL APP ============
+  app:
+    image: php:8.2-fpm-alpine
+    container_name: emosync_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./emosync-backend:/var/www/html
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - emosync_network
+
+  # ============ NGINX (Web Server) ============
+  nginx:
+    image: nginx:alpine
+    container_name: emosync_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./emosync-backend:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - emosync_network
+
+networks:
+  emosync_network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
+  redis_insight_data:
+    driver: local
+  mysql_data:
+    driver: local
