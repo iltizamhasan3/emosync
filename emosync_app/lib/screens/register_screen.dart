@@ -202,16 +202,10 @@ class _RegisterPageState extends State<RegisterPage> {
               _buildForm(),
               const SizedBox(height: 24),
               
-              _buildRegisterButton(),
-              const SizedBox(height: 20),
-              
-              _buildDivider(),
-              const SizedBox(height: 20),
-              
-              _buildGoogleButton(),
+               _buildRegisterButton(),
               const SizedBox(height: 32),
               
-              _buildFooterLink(),
+               _buildFooterLink(),
               const SizedBox(height: 40),
             ],
           ),
@@ -610,71 +604,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
       ),
-    );
-  }
-
-  Widget _buildDivider() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 1,
-            color: const Color(0xFFC3ADA7).withValues(alpha: 0.2),
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'ATAU DAFTAR DENGAN',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 1.2,
-              color: Color(0xFF6D5B56),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: const Color(0xFFC3ADA7).withValues(alpha: 0.2),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGoogleButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: IconButton(
-            onPressed: () {},
-            icon: Text(
-              'G',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[700],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 

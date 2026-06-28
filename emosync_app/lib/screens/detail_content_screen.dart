@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailContentPage extends StatelessWidget {
   final Map<String, dynamic> content;
@@ -108,56 +109,28 @@ class DetailContentPage extends StatelessWidget {
                   const SizedBox(height: 32),
                   
                   // Action Button (jika video)
+                  
                   if (content['type'] == 'VIDEO')
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // TODO: Play video
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Video akan diputar'),
-                              backgroundColor: Color(0xFFFF8A65),
-                            ),
-                          );
+                          final videoUrl = content['video_url'] as String?;
+                          if (videoUrl != null && videoUrl.isNotEmpty) {
+                            launchUrl(Uri.parse(videoUrl), mode: LaunchMode.externalApplication);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('URL video tidak tersedia'),
+                                backgroundColor: Color(0xFFFF8A65),
+                              ),
+                            );
+                          }
                         },
                         icon: const Icon(Icons.play_circle_filled, size: 24),
                         label: const Text(
                           'Tonton Video',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: categoryColor,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 0,
-                        ),
-                      ),
-                    ),
-                  
-                  if (content['type'] == 'ARTIKEL')
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          // TODO: Save to bookmarks or share
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Artikel disimpan'),
-                              backgroundColor: Color(0xFF4CAF50),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.bookmark_border, size: 24),
-                        label: const Text(
-                          'Simpan Artikel',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -181,7 +154,6 @@ class DetailContentPage extends StatelessWidget {
       ),
     );
   }
-
   Color _getCategoryColor(String type) {
     switch (type) {
       case 'ARTIKEL':
@@ -209,27 +181,10 @@ class DetailContentPage extends StatelessWidget {
   }
 
   String _getFullContent(Map<String, dynamic> content) {
-    switch (content['type']) {
-      case 'ARTIKEL':
-        return '${content['description']}\n\n'
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.\n\n'
-            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n'
-            'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.';
-      
-      case 'VIDEO':
-        return '${content['description']}\n\n'
-            'Durasi: 5 menit\n\n'
-            'Dalam video ini, Anda akan belajar:\n'
-            '• Teknik pernapasan dasar\n'
-            '• Cara menenangkan pikiran\n'
-            '• Latihan relaksasi sederhana\n\n'
-            'Ikuti panduan ini dengan perlahan dan rasakan perbedaannya.';
-      
-      case 'KUTIPAN':
-        return content['description'];
-      
-      default:
-        return content['description'];
+    final fullContent = content['full_content'] as String?;
+    if (fullContent != null && fullContent.isNotEmpty) {
+      return fullContent;
     }
+    return content['description'] ?? '';
   }
 }

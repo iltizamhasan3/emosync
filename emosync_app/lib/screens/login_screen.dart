@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'register_screen.dart';
-import 'reset_password_screen.dart';
 import 'home_screen.dart';
 import '../services/local_storage_service.dart';
 
@@ -143,30 +142,6 @@ class _LoginPageState extends State<LoginPage> {
                 suffixIcon: Icons.visibility_outlined,
               ),
 
-              // Forgot Password
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ResetPasswordPage(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'LUPA KATA SANDI?',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                      color: Color(0xFFFF8A65),
-                    ),
-                  ),
-                ),
-              ),
-
               const SizedBox(height: 20),
 
               // Login Button
@@ -203,55 +178,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               const SizedBox(height: 30),
-
-              // Divider
-              Row(
-                children: [
-                  Expanded(child: Divider(color: Colors.grey[300])),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      'ATAU',
-                      style: TextStyle(fontSize: 11, color: Colors.grey[400]),
-                    ),
-                  ),
-                  Expanded(child: Divider(color: Colors.grey[300])),
-                ],
-              ),
-
-              const SizedBox(height: 30),
-
-              // Google Button
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: Colors.grey[300]!),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.g_mobiledata, size: 30, color: Color(0xFF3F51B5)),
-                      SizedBox(width: 8),
-                      Text(
-                        'Masuk dengan Google',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 40),
 
               // Register Link
               Row(

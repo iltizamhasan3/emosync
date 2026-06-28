@@ -44,6 +44,7 @@ class FriendshipController extends Controller
                     'username' => $friend->username,
                     'email' => $friend->email,
                     'avatar' => $friend->avatar ?? 'male',
+                    'is_premium' => $friend->isPremium(),
                 ];
             })
         ]);
@@ -142,6 +143,7 @@ class FriendshipController extends Controller
                     'name' => $friend->name,
                     'username' => $friend->username,
                     'avatar' => $friend->avatar ?? 'male',
+                    'is_premium' => $friend->isPremium(),
                 ]
             ]
         ], 201);
@@ -317,6 +319,7 @@ class FriendshipController extends Controller
                     'username' => $user->username,
                     'email' => $user->email,
                     'avatar' => $user->avatar ?? 'male',
+                    'is_premium' => $user->isPremium(),
                 ];
             })
         ]);
