@@ -46,7 +46,7 @@ emosync-backend/.idea/
 emosync-backend/.vscode/
 
 # ============ Docker ============
-docker/
+/docker/
 *.sql
 *.sql.gz
 *.tar.gz
