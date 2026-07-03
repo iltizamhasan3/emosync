@@ -1,12 +1,8 @@
 class ApiConstants {
-  // Untuk emulator Android
-  //static const String baseUrl = 'http://10.0.2.2:8000/api';
-  
-  // Untuk web di browser
-   static const String baseUrl = 'http://localhost:8000/api';
-  
-  // Untuk device fisik (ganti dengan IP komputer)
-  // static const String baseUrl = 'http://192.168.x.x:8000/api';
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://10.0.2.2:8000/api',
+  );
   
   // ============ AUTH ENDPOINTS ============
   static const String register = '/register';
