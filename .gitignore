@@ -1,0 +1,43 @@
+# ============ Flutter ============
+emosync_app/.dart_tool/
+emosync_app/.pub/
+emosync_app/build/
+emosync_app/.flutter-plugins
+emosync_app/.flutter-plugins-dependencies
+emosync_app/pubspec.lock
+emosync_app/ios/Pods/
+emosync_app/ios/.symlinks/
+emosync_app/ios/Flutter/App.framework/
+emosync_app/ios/Flutter/Flutter.framework/
+emosync_app/ios/Flutter/Flutter.podspec
+emosync_app/ios/Flutter/Generated.xcconfig
+emosync_app/ios/Flutter/ephemeral/
+emosync_app/ios/Runner/GeneratedPluginRegistrant.*
+emosync_app/android/.gradle/
+emosync_app/android/.idea/
+emosync_app/android/app/build/
+emosync_app/android/local.properties
+emosync_app/macos/Flutter/ephemeral/
+emosync_app/linux/flutter/ephemeral/
+emosync_app/windows/flutter/ephemeral/
+
+# ============ Backend (separate repo) ============
+emosync-backend/
+
+# ============ IDE ============
+.vscode/
+.idea/
+*.iml
+
+# ============ OS ============
+.DS_Store
+Thumbs.db
+
+# ============ Logs ============
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# ============ Cache ============
+.cache/
+*.cache
