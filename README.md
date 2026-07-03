@@ -1,24 +1,16 @@
 <h1 align="center">🧠 EmoSync</h1>
-<p align="center"><b>Aplikasi Pemantauan & Pelacakan Mood berbasis Flutter + Laravel</b></p>
-
-<p align="center">
-  📱 Pantau kesehatan emosional harianmu<br/>
-  🤝 Terhubung dengan teman<br/>
-  🧘 Dapatkan konten mindfulness & meditasi<br/>
-  ⭐ Buka fitur eksklusif dengan langganan Premium
-</p>
-
-<br/>
 
 <div align="center">
   <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter"/>
   <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart"/>
   <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"/>
-  <br/>
-  <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square"/>
-  <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=flat-square"/>
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square"/>
 </div>
+
+<br/>
+
+<p align="center">
+  📱 Pantau kesehatan emosional harianmu &nbsp;·&nbsp; 🤝 Terhubung dengan teman &nbsp;·&nbsp; 🧘 Konten mindfulness & meditasi &nbsp;·&nbsp; ⭐ Fitur Premium eksklusif
+</p>
 
 <hr/>
 
