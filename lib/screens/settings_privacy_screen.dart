@@ -29,28 +29,44 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
       _isLoading = true;
     });
     
-    final result = await _apiService.getSettings();
-    
-    if (result['success'] && result['data'] != null) {
-      final data = result['data'];
-      final privacy = data['privacy'] ?? {};
+    try {
+      final result = await _apiService.getSettings();
+      
+      if (result['success'] && result['data'] != null) {
+        final data = result['data'];
+        final privacy = data['privacy'] ?? {};
+        setState(() {
+          _showOnlineStatus = privacy['show_active'] ?? true;
+          _showLastSeen = privacy['show_last_seen'] ?? true;
+          _showMoodHistory = privacy['show_mood'] ?? true;
+          _allowFriendRequests = privacy['allow_requests'] ?? true;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message'] ?? 'Gagal memuat pengaturan privasi'),
+              backgroundColor: const Color(0xFFA83836),
+            ),
+          );
+        }
+      }
+    } catch (e) {
       setState(() {
-        _showOnlineStatus = privacy['show_active'] ?? true;
-        _showLastSeen = privacy['show_last_seen'] ?? true;
-        _showMoodHistory = privacy['show_mood'] ?? true;
-        _allowFriendRequests = privacy['allow_requests'] ?? true;
         _isLoading = false;
       });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result['message'] ?? 'Gagal memuat pengaturan privasi'),
-          backgroundColor: const Color(0xFFA83836),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal memuat pengaturan privasi: $e'),
+            backgroundColor: const Color(0xFFA83836),
+          ),
+        );
+      }
     }
   }
 

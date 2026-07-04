@@ -35,39 +35,55 @@ class _JournalPageState extends State<JournalPage> {
       _isLoading = true;
     });
     
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    setState(() {
-      _isPremium = authProvider.isPremium;
-    });
-    
-    final result = await _apiService.getCheckinHistory();
-    
-    if (result['success']) {
-      final List checkins = result['data'];
-      final sortedCheckins = List<Map<String, dynamic>>.from(checkins.map((c) => {
-        'id': c.id,
-        'mood': c.mood,
-        'factors': c.pemicus,
-        'journal': c.catatan,
-        'date': c.createdAt.toIso8601String(),
-        'timestamp': c.createdAt.millisecondsSinceEpoch,
-      }))..sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      setState(() {
+        _isPremium = authProvider.isPremium;
+      });
       
+      final result = await _apiService.getCheckinHistory();
+      
+      if (result['success'] && result['data'] != null) {
+        final List checkins = result['data'];
+        final sortedCheckins = List<Map<String, dynamic>>.from(checkins.map((c) => {
+          'id': c.id,
+          'mood': c.mood,
+          'factors': c.pemicus,
+          'journal': c.catatan,
+          'date': c.createdAt.toIso8601String(),
+          'timestamp': c.createdAt.millisecondsSinceEpoch,
+        }))..sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
+        
+        setState(() {
+          _checkins = sortedCheckins;
+          _recentCheckins = sortedCheckins.take(4).toList();
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message'] ?? 'Gagal memuat riwayat'),
+              backgroundColor: const Color(0xFFA83836),
+            ),
+          );
+        }
+      }
+    } catch (e) {
       setState(() {
-        _checkins = sortedCheckins;
-        _recentCheckins = sortedCheckins.take(4).toList();
         _isLoading = false;
       });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result['message'] ?? 'Gagal memuat riwayat'),
-          backgroundColor: const Color(0xFFA83836),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal memuat riwayat: $e'),
+            backgroundColor: const Color(0xFFA83836),
+          ),
+        );
+      }
     }
   }
 

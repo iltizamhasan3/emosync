@@ -42,10 +42,12 @@ class ApiService {
 
   void _invalidateCache(String key) {
     _cache.remove(key);
+    _pendingRequests.remove(key);
   }
 
   void _invalidatePrefix(String prefix) {
     _cache.removeWhere((k, _) => k.startsWith(prefix));
+    _pendingRequests.removeWhere((k, _) => k.startsWith(prefix));
   }
 
   Future<String?> _getToken() async {
@@ -992,10 +994,11 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
       final result = _handleResponse(response);
       if (result['success'] && result['data'] != null) {
-        _setCache('settings', result);
+        final data = result['data']['data'] ?? result['data'];
+        _setCache('settings', {'success': true, 'data': data});
         return {
           'success': true,
-          'data': result['data'],
+          'data': data,
         };
       }
       return result;

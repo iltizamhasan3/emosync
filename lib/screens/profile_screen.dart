@@ -53,19 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final userAvatar = prefs.getString('user_avatar') ?? 'male';
     
     try {
-      // Jalankan 4 API call secara parallel
-      final results = await Future.wait([
-        _apiService.getProfile(),
-        _apiService.getDashboard(),
-        _apiService.getCheckinHistory(),
-        _apiService.getFriends(),
-      ]);
-      
-      final profileResult = results[0];
-      final dashboardResult = results[1];
-      final checkinsResult = results[2];
-      final friendsResult = results[3];
-
+      final profileResult = await _apiService.getProfile();
       if (profileResult['success'] && profileResult['data'] != null) {
         final data = profileResult['data'];
         _userAvatar = data['avatar'] ?? 'male';
@@ -73,31 +61,49 @@ class _ProfilePageState extends State<ProfilePage> {
       } else {
         _userAvatar = userAvatar;
       }
-      
-      if (dashboardResult['success']) {
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error loading profile: $e');
+      _userAvatar = userAvatar;
+    }
+    
+    try {
+      final dashboardResult = await _apiService.getDashboard();
+      if (dashboardResult['success'] && dashboardResult['data'] != null) {
         final dashboard = dashboardResult['data'];
         _streak = dashboard.streak;
       }
-      
-      if (checkinsResult['success']) {
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error loading dashboard: $e');
+    }
+    
+    try {
+      final checkinsResult = await _apiService.getCheckinHistory();
+      if (checkinsResult['success'] && checkinsResult['data'] != null) {
         _checkinCount = checkinsResult['data'].length;
       }
-      
-      if (friendsResult['success']) {
+    } catch (e) {
+      if (kDebugMode) debugPrint('Error loading checkins: $e');
+    }
+    
+    try {
+      final friendsResult = await _apiService.getFriends();
+      if (friendsResult['success'] && friendsResult['data'] != null) {
         _friendCount = friendsResult['data'].length;
       }
     } catch (e) {
-      if (kDebugMode) debugPrint('Error loading profile data: $e');
+      if (kDebugMode) debugPrint('Error loading friends: $e');
     }
     
-    setState(() {
-      _userName = userName ?? 'Pengguna';
-      _userUsername = userUsername ?? '@pengguna';
-      _userEmail = userEmail ?? 'user@example.com';
-      _isPremium = isPremium;
-      _currentPlan = currentPlan.isEmpty ? 'monthly' : currentPlan;
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _userName = userName ?? 'Pengguna';
+        _userUsername = userUsername ?? '@pengguna';
+        _userEmail = userEmail ?? 'user@example.com';
+        _isPremium = isPremium;
+        _currentPlan = currentPlan.isEmpty ? 'monthly' : currentPlan;
+        _isLoading = false;
+      });
+    }
   }
 
   void _logout() {

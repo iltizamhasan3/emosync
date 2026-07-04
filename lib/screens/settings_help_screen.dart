@@ -125,8 +125,8 @@ class HelpCenterPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Version 1.0.0',
+                  Text(
+                    'Version 1.0.5',
                     style: TextStyle(
                       fontSize: 12,
                       color: Color(0xFF6D5B56),

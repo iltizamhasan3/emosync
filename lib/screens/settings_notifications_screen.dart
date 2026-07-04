@@ -29,28 +29,44 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
       _isLoading = true;
     });
     
-    final result = await _apiService.getSettings();
-    
-    if (result['success'] && result['data'] != null) {
-      final data = result['data'];
-      final notif = data['notification'];
+    try {
+      final result = await _apiService.getSettings();
+      
+      if (result['success'] && result['data'] != null) {
+        final data = result['data'];
+        final notif = data['notification'] ?? {};
+        setState(() {
+          _dailyReminder = notif['daily_reminder'] ?? true;
+          _weeklyReport = notif['weekly_report'] ?? true;
+          _friendActivity = notif['friend_activity'] ?? false;
+          _tipsInsights = notif['tips_insights'] ?? true;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message'] ?? 'Gagal memuat pengaturan'),
+              backgroundColor: const Color(0xFFA83836),
+            ),
+          );
+        }
+      }
+    } catch (e) {
       setState(() {
-        _dailyReminder = notif['daily_reminder'] ?? true;
-        _weeklyReport = notif['weekly_report'] ?? true;
-        _friendActivity = notif['friend_activity'] ?? false;
-        _tipsInsights = notif['tips_insights'] ?? true;
         _isLoading = false;
       });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result['message'] ?? 'Gagal memuat pengaturan'),
-          backgroundColor: const Color(0xFFA83836),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal memuat pengaturan: $e'),
+            backgroundColor: const Color(0xFFA83836),
+          ),
+        );
+      }
     }
   }
 
