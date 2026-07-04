@@ -95,6 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
+                  clipBehavior: Clip.none,
                   onPageChanged: (index) {
                     setState(() {
                       _currentPage = index;
@@ -190,8 +191,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // ============ PAGE 1: KENALI DIRIMU (4 Kuadran Mood) ============
   Widget _buildQuadrantPage(OnboardingContent content) {
-    double illustrationSize = MediaQuery.of(context).size.width - 64;
-    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.28;
+    double illustrationSize = MediaQuery.of(context).size.width - 80;
+    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.26;
     if (illustrationSize > maxIllustrationHeight) {
       illustrationSize = maxIllustrationHeight;
     }
@@ -199,6 +200,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Center(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
+        clipBehavior: Clip.none,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -215,6 +217,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
                     physics: const NeverScrollableScrollPhysics(),
+                    clipBehavior: Clip.none,
                     children: [
                       _buildMoodQuadrant(
                         icon: Icons.light_mode,
@@ -241,7 +244,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
               
-              const SizedBox(height: 32),
+              const SizedBox(height: 56),
               
               // Text Content
               Text(
@@ -306,8 +309,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // ============ PAGE 2: CARI PENYEBABNYA (Habits Grid) ============
   Widget _buildActivitiesPage(OnboardingContent content) {
-    double illustrationSize = MediaQuery.of(context).size.width - 64;
-    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.28;
+    double illustrationSize = MediaQuery.of(context).size.width - 80;
+    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.26;
     if (illustrationSize > maxIllustrationHeight) {
       illustrationSize = maxIllustrationHeight;
     }
@@ -315,6 +318,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Center(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
+        clipBehavior: Clip.none,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -441,8 +445,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // ============ PAGE 3: LIHAT POLAMU (Bar Chart Clean) ============
   Widget _buildStatsPage(OnboardingContent content) {
-    double illustrationSize = MediaQuery.of(context).size.width - 64;
-    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.28;
+    double illustrationSize = MediaQuery.of(context).size.width - 80;
+    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.26;
     if (illustrationSize > maxIllustrationHeight) {
       illustrationSize = maxIllustrationHeight;
     }
@@ -452,6 +456,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Center(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
+        clipBehavior: Clip.none,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(

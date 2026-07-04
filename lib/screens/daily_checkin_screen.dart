@@ -62,21 +62,53 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
     });
     
     final result = await _apiService.getPemicu();
-    if (result['success'] && mounted) {
+    
+    final List<Map<String, dynamic>> defaultPemicu = [
+      {'id': 1, 'name': 'Work', 'kategori': 'Aktivitas', 'icon': Icons.work, 'color': const Color(0xFFFFF3E0)},
+      {'id': 2, 'name': 'Study', 'kategori': 'Aktivitas', 'icon': Icons.school, 'color': const Color(0xFFFFF3E0)},
+      {'id': 3, 'name': 'Exercise', 'kategori': 'Aktivitas', 'icon': Icons.fitness_center, 'color': const Color(0xFFFFF3E0)},
+      {'id': 4, 'name': 'Screen Time', 'kategori': 'Aktivitas', 'icon': Icons.important_devices, 'color': const Color(0xFFFFF3E0)},
+      {'id': 5, 'name': 'Sleep', 'kategori': 'Gaya Hidup', 'icon': Icons.nightlight, 'color': const Color(0xFFE8F5E9)},
+      {'id': 6, 'name': 'Food', 'kategori': 'Gaya Hidup', 'icon': Icons.restaurant, 'color': const Color(0xFFE8F5E9)},
+      {'id': 7, 'name': 'Caffeine', 'kategori': 'Gaya Hidup', 'icon': Icons.local_cafe, 'color': const Color(0xFFE8F5E9)},
+      {'id': 8, 'name': 'Weather', 'kategori': 'Lingkungan', 'icon': Icons.cloud, 'color': const Color(0xFFE3F2FD)},
+      {'id': 9, 'name': 'Nature', 'kategori': 'Lingkungan', 'icon': Icons.park, 'color': const Color(0xFFE3F2FD)},
+      {'id': 10, 'name': 'Music', 'kategori': 'Lingkungan', 'icon': Icons.music_note, 'color': const Color(0xFFE3F2FD)},
+      {'id': 11, 'name': 'Social', 'kategori': 'Sosial', 'icon': Icons.people, 'color': const Color(0xFFFCE4EC)},
+      {'id': 12, 'name': 'Relationship', 'kategori': 'Sosial', 'icon': Icons.favorite_border, 'color': const Color(0xFFFCE4EC)},
+      {'id': 13, 'name': 'Health', 'kategori': 'Kesehatan', 'icon': Icons.medical_services, 'color': const Color(0xFFF3E5F5)},
+      {'id': 14, 'name': 'Stress', 'kategori': 'Kesehatan', 'icon': Icons.psychology, 'color': const Color(0xFFF3E5F5)},
+      {'id': 15, 'name': 'Finance', 'kategori': 'Keuangan', 'icon': Icons.payments, 'color': const Color(0xFFFFF8E1)},
+    ];
+
+    if (result['success'] && mounted && result['data'] != null && (result['data'] as List).isNotEmpty) {
       setState(() {
         _pemicuList = List<Map<String, dynamic>>.from(result['data'].map((p) => {
           'id': p.id,
           'name': p.nama,
-          'kategori': p.kategori ?? '',
+          'kategori': p.kategori ?? 'Lainnya',
           'icon': _getIconForPemicu(p.nama),
-          'color': const Color(0xFFFFF3E0),
+          'color': _getColorForKategori(p.kategori ?? ''),
         }));
         _isLoadingPemicu = false;
       });
     } else if (mounted) {
       setState(() {
+        _pemicuList = defaultPemicu;
         _isLoadingPemicu = false;
       });
+    }
+  }
+
+  Color _getColorForKategori(String kategori) {
+    switch (kategori) {
+      case 'Aktivitas': return const Color(0xFFFFF3E0);
+      case 'Gaya Hidup': return const Color(0xFFE8F5E9);
+      case 'Lingkungan': return const Color(0xFFE3F2FD);
+      case 'Sosial': return const Color(0xFFFCE4EC);
+      case 'Kesehatan': return const Color(0xFFF3E5F5);
+      case 'Keuangan': return const Color(0xFFFFF8E1);
+      default: return const Color(0xFFF5F5F5);
     }
   }
 

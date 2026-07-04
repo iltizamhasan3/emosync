@@ -309,9 +309,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF8A65)),
               ),
             )
-          : SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
+          : RefreshIndicator(
+              onRefresh: _loadUserData,
+              color: const Color(0xFFFF8A65),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                child: Column(
                 children: [
                   _buildHeader(),
                   Padding(
@@ -333,6 +336,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
+          ),
     );
   }
 
