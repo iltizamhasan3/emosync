@@ -4,6 +4,10 @@
   <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter"/>
   <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart"/>
   <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase"/>
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis"/>
+  <img src="https://img.shields.io/badge/Upstash-00E9A3?style=for-the-badge&logo=upstash&logoColor=white" alt="Upstash"/>
   <img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway"/>
   <img src="https://img.shields.io/badge/Release-v1.0.5-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.5"/>
 </div>
@@ -107,25 +111,40 @@
 ### 🖥️ Backend (Laravel)
 | Teknologi | Kegunaan |
 |-----------|----------|
-| [Laravel 11](https://laravel.com/) | Framework PHP |
+| [Laravel 13](https://laravel.com/) | Framework PHP |
 | [Sanctum](https://laravel.com/docs/sanctum) | Autentikasi API token |
-| [MySQL](https://www.mysql.com/) | Database relasional |
+| [PostgreSQL](https://www.postgresql.org/) | Database relasional via Supabase |
+| [Supabase](https://supabase.com/) | Hosting database PostgreSQL (free tier 500MB) |
+| [Redis](https://redis.io/) | Cache & session via Upstash |
+| [Upstash](https://upstash.com/) | Redis serverless (free tier 100MB) |
 | [REST API](https://laravel.com/docs/routing) | Arsitektur API |
 
-### ☁️ Deployment
+### ☁️ Deployment & Hosting
 | Teknologi | Kegunaan |
 |-----------|----------|
-| [Railway](https://railway.app/) | Hosting backend API & database |
+| [Railway](https://railway.app/) | Hosting Laravel (serverless/dormant) |
+| [Docker](https://www.docker.com/) | Containerisasi aplikasi |
 
 <hr/>
 
 ## 🚀 Deployed API
 
-Backend aktif di Railway:
+Backend aktif di Railway (serverless — tidur saat idle, bangun saat ada request):
 
 ```
 https://emosync-backend-production.up.railway.app
 ```
+
+### 🗄️ Infrastructure Stack
+
+| Service | Provider | Biaya/bln |
+|---------|----------|-----------|
+| 🖥️ Laravel Backend | [Railway](https://railway.app/) (serverless dormant) | ~$0-2 |
+| 🐘 Database PostgreSQL | [Supabase](https://supabase.com/) (free tier 500MB) | **$0** |
+| ⚡ Redis Cache & Session | [Upstash](https://upstash.com/) (free tier 100MB) | **$0** |
+| **Total** | | **~$0-2/bulan** |
+
+> 💡 Backend di-serverless-kan — credit Railway dipakai per-detik CPU, bukan fixed. Database Supabase & Upstash pun serverless & dormant saat tidak dipakai.
 
 <hr/>
 
@@ -186,9 +205,9 @@ Unduh APK terbaru langsung dari release:
 
 Atau lihat [Releases](https://github.com/iltizamhasan3/emosync/releases) untuk versi lain.
 
-> **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Tidak perlu setup backend lokal.
+> **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Database pakai Supabase PostgreSQL, cache & session pakai Upstash Redis. Tidak perlu setup backend lokal.
 >
-> **Versi:** 1.0.5 | **Build:** `1.0.5+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2
+> **Versi:** 1.0.5 | **Build:** `1.0.5+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2 | **Laravel:** 13
 
 ---
 
@@ -322,11 +341,13 @@ php artisan migrate
 php artisan serve
 ```
 
-### ☁️ Backend di Railway
+### ☁️ Backend Production
 
-Backend sudah terdeploy otomatis via Railway. Setiap push ke branch `main` di [emosync-backend](https://github.com/iltizamhasan3/emosync-backend) akan mendeploy ulang.
-
-**Tidak perlu setup backend sendiri** — APK di atas langsung nyambung ke Railway.
+| Layer | Provider | Cost |
+|-------|----------|------|
+| **Laravel** | Railway (serverless) | ~$0-2/bln |
+| **DB** | Supabase PostgreSQL (500MB) | **Gratis** |
+| **Cache/Session** | Upstash Redis (100MB) | **Gratis** |
 
 <hr/>
 
