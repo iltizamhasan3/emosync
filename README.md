@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis"/>
   <img src="https://img.shields.io/badge/Upstash-00E9A3?style=for-the-badge&logo=upstash&logoColor=white" alt="Upstash"/>
   <img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway"/>
-  <img src="https://img.shields.io/badge/Release-v1.0.5-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.5"/>
+  <img src="https://img.shields.io/badge/Release-v1.0.6-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.6"/>
 </div>
 
 <br/>
@@ -200,13 +200,13 @@ https://emosync-backend-production.up.railway.app
 
 Unduh APK terbaru langsung dari release:
 
-[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.5/app-release.apk) (54MB)
+[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.6/app-release.apk) (54MB)
 
 Atau lihat [Releases](https://github.com/iltizamhasan3/emosync/releases) untuk versi lain.
 
 > **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Database pakai Supabase PostgreSQL, cache & session pakai Upstash Redis. Tidak perlu setup backend lokal.
 >
-> **Versi:** 1.0.5 | **Build:** `1.0.5+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2 | **Laravel:** 13
+> **Versi:** 1.0.6 | **Build:** `1.0.6+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2 | **Laravel:** 13
 
 ---
 
