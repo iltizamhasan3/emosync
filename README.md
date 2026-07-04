@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart"/>
   <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"/>
   <img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway"/>
-  <img src="https://img.shields.io/badge/Release-v1.0.4-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.4"/>
+  <img src="https://img.shields.io/badge/Release-v1.0.5-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.5"/>
 </div>
 
 <br/>
@@ -182,13 +182,13 @@ https://emosync-backend-production.up.railway.app
 
 Unduh APK terbaru langsung dari release:
 
-[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.4/app-release.apk) (54MB)
+[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.5/app-release.apk) (54MB)
 
 Atau lihat [Releases](https://github.com/iltizamhasan3/emosync/releases) untuk versi lain.
 
 > **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Tidak perlu setup backend lokal.
 >
-> **Versi:** 1.0.4 | **Build:** `1.0.4+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2
+> **Versi:** 1.0.5 | **Build:** `1.0.5+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2
 
 ---
 
