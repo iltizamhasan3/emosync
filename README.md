@@ -181,7 +181,7 @@ https://emosync-backend-production.up.railway.app
 
 Unduh APK terbaru langsung dari release:
 
-[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.0/app-release.apk) (50MB)
+[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.1/app-release.apk) (50MB)
 
 Atau lihat [Releases](https://github.com/iltizamhasan3/emosync/releases) untuk versi lain.
 
