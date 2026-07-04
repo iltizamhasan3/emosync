@@ -137,12 +137,11 @@ https://emosync-backend-production.up.railway.app
 
 ### 🗄️ Infrastructure Stack
 
-| Service | Provider | Biaya/bln |
-|---------|----------|-----------|
-| 🖥️ Laravel Backend | [Railway](https://railway.app/) (serverless dormant) | ~$0-2 |
-| 🐘 Database PostgreSQL | [Supabase](https://supabase.com/) (free tier 500MB) | **$0** |
-| ⚡ Redis Cache & Session | [Upstash](https://upstash.com/) (free tier 100MB) | **$0** |
-| **Total** | | **~$0-2/bulan** |
+| Service | Provider |
+|---------|----------|
+| 🖥️ Laravel Backend | [Railway](https://railway.app/) (serverless dormant) |
+| 🐘 Database PostgreSQL | [Supabase](https://supabase.com/) (free tier 500MB) |
+| ⚡ Redis Cache & Session | [Upstash](https://upstash.com/) (free tier 100MB) |
 
 > 💡 Backend di-serverless-kan — credit Railway dipakai per-detik CPU, bukan fixed. Database Supabase & Upstash pun serverless & dormant saat tidak dipakai.
 
@@ -343,11 +342,11 @@ php artisan serve
 
 ### ☁️ Backend Production
 
-| Layer | Provider | Cost |
-|-------|----------|------|
-| **Laravel** | Railway (serverless) | ~$0-2/bln |
-| **DB** | Supabase PostgreSQL (500MB) | **Gratis** |
-| **Cache/Session** | Upstash Redis (100MB) | **Gratis** |
+| Layer | Provider |
+|-------|----------|
+| **Laravel** | Railway (serverless) |
+| **DB** | Supabase PostgreSQL |
+| **Cache/Session** | Upstash Redis |
 
 <hr/>
 
