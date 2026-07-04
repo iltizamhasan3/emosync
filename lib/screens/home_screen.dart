@@ -294,12 +294,15 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 24),
                 ],
                 
-                Row(
-                  children: [
-                    Expanded(child: _buildStreakCard()),
-                    const SizedBox(width: 16),
-                    Expanded(child: _buildMoodDominantCard()),
-                  ],
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: _buildStreakCard()),
+                      const SizedBox(width: 16),
+                      Expanded(child: _buildMoodDominantCard()),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 24),
                 
@@ -314,34 +317,37 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFAF9F6).withValues(alpha: 0.9),
-        border: Border(
-          bottom: BorderSide(
-            color: const Color(0xFFE0E0E0).withValues(alpha: 0.1),
-          ),
-        ),
-      ),
-      child: const Row(
-        children: [
-          Icon(
-            Icons.bubble_chart,
-            color: Color(0xFFFF8A65),
-            size: 28,
-          ),
-          SizedBox(width: 8),
-          Text(
-            'EmoSync',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.5,
-              color: Color(0xFFFF8A65),
+    return SafeArea(
+      bottom: false,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFAF9F6).withValues(alpha: 0.9),
+          border: Border(
+            bottom: BorderSide(
+              color: const Color(0xFFE0E0E0).withValues(alpha: 0.1),
             ),
           ),
-        ],
+        ),
+        child: const Row(
+          children: [
+            Icon(
+              Icons.bubble_chart,
+              color: Color(0xFFFF8A65),
+              size: 28,
+            ),
+            SizedBox(width: 8),
+            Text(
+              'EmoSync',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
+                color: Color(0xFFFF8A65),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -649,7 +655,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildStreakCard() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -667,16 +673,30 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.local_fire_department,
-            color: Color(0xFFFF8A65),
-            size: 24,
+          const Row(
+            children: [
+              Icon(
+                Icons.local_fire_department,
+                color: Color(0xFFFF8A65),
+                size: 20,
+              ),
+              SizedBox(width: 6),
+              Text(
+                'STREAK HARIAN',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  color: Color(0xFF6D5B56),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           Text(
-            '$_streak ${_streak == 1 ? 'Hari' : 'Hari'}',
+            '$_streak Hari',
             style: const TextStyle(
-              fontSize: 28,
+              fontSize: 24,
               fontWeight: FontWeight.w900,
               color: Color(0xFF3E2F2B),
             ),
@@ -711,7 +731,7 @@ class _HomePageState extends State<HomePage> {
     }
     
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -729,20 +749,30 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'MOOD DOMINAN',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.5,
-              color: Color(0xFF6D5B56),
-            ),
+          const Row(
+            children: [
+              Icon(
+                Icons.psychology,
+                color: Color(0xFFFF8A65),
+                size: 20,
+              ),
+              SizedBox(width: 6),
+              Text(
+                'MOOD DOMINAN',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  color: Color(0xFF6D5B56),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           Text(
             dominantMood,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 24,
               fontWeight: FontWeight.w900,
               color: Color(0xFF3E2F2B),
             ),

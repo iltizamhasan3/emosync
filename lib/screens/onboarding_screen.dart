@@ -85,12 +85,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // Main Content - Posisi tengah vertical
           Column(
             children: [
-              // Spacer besar di atas untuk mendorong konten ke tengah
-              const Spacer(flex: 1),
+              // Top padding to avoid header overlap
+              const SafeArea(
+                bottom: false,
+                child: SizedBox(height: 60),
+              ),
               
               // Konten utama (PageView)
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.55,
+              Expanded(
                 child: PageView.builder(
                   controller: _pageController,
                   onPageChanged: (index) {
@@ -104,9 +106,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   },
                 ),
               ),
-              
-              // Spacer kecil antara konten dan tombol
-              const Spacer(flex: 1),
               
               // Bottom Controls
               _buildBottomControls(),
@@ -191,9 +190,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // ============ PAGE 1: KENALI DIRIMU (4 Kuadran Mood) ============
   Widget _buildQuadrantPage(OnboardingContent content) {
+    double illustrationSize = MediaQuery.of(context).size.width - 64;
+    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.28;
+    if (illustrationSize > maxIllustrationHeight) {
+      illustrationSize = maxIllustrationHeight;
+    }
+
     return Center(
       child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -201,8 +206,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             children: [
               // Bento Grid 4 Kuadran
               SizedBox(
-                width: MediaQuery.of(context).size.width - 64,
-                height: MediaQuery.of(context).size.width - 64,
+                width: illustrationSize,
+                height: illustrationSize,
                 child: Transform.rotate(
                   angle: 0.05,
                   child: GridView.count(
@@ -301,9 +306,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // ============ PAGE 2: CARI PENYEBABNYA (Habits Grid) ============
   Widget _buildActivitiesPage(OnboardingContent content) {
+    double illustrationSize = MediaQuery.of(context).size.width - 64;
+    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.28;
+    if (illustrationSize > maxIllustrationHeight) {
+      illustrationSize = maxIllustrationHeight;
+    }
+
     return Center(
       child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -311,8 +322,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             children: [
               // Bento Grid Habits (tanpa teks keterangan)
               SizedBox(
-                width: MediaQuery.of(context).size.width - 64,
-                height: MediaQuery.of(context).size.width - 64,
+                width: illustrationSize,
+                height: illustrationSize,
                 child: Column(
                   children: [
                     // Row 1: Coffee + Sleep
@@ -430,9 +441,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // ============ PAGE 3: LIHAT POLAMU (Bar Chart Clean) ============
   Widget _buildStatsPage(OnboardingContent content) {
+    double illustrationSize = MediaQuery.of(context).size.width - 64;
+    double maxIllustrationHeight = MediaQuery.of(context).size.height * 0.28;
+    if (illustrationSize > maxIllustrationHeight) {
+      illustrationSize = maxIllustrationHeight;
+    }
+    double scale = (illustrationSize - 48) / 140.0;
+    if (scale > 1.0) scale = 1.0;
+
     return Center(
       child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -440,8 +459,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             children: [
               // Bar Chart Card (tanpa label & insight tag)
               Container(
-                width: MediaQuery.of(context).size.width - 64,
-                height: MediaQuery.of(context).size.width - 64,
+                width: illustrationSize,
+                height: illustrationSize,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -454,16 +473,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: EdgeInsets.all(24 * scale),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildCleanBar(height: 60, color: const Color(0xFFE0F2F1)),
-                      _buildCleanBar(height: 110, color: const Color(0xFFFFF9C4)),
-                      _buildCleanBar(height: 80, color: const Color(0xFFF3E5F5)),
-                      _buildCleanBar(height: 130, color: const Color(0xFFFF8A65)),
-                      _buildCleanBar(height: 45, color: const Color(0xFFFFD180)),
+                      _buildCleanBar(width: 32 * scale, height: 60 * scale, color: const Color(0xFFE0F2F1)),
+                      _buildCleanBar(width: 32 * scale, height: 110 * scale, color: const Color(0xFFFFF9C4)),
+                      _buildCleanBar(width: 32 * scale, height: 80 * scale, color: const Color(0xFFF3E5F5)),
+                      _buildCleanBar(width: 32 * scale, height: 130 * scale, color: const Color(0xFFFF8A65)),
+                      _buildCleanBar(width: 32 * scale, height: 45 * scale, color: const Color(0xFFFFD180)),
                     ],
                   ),
                 ),
@@ -502,13 +521,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildCleanBar({required double height, required Color color}) {
+  Widget _buildCleanBar({required double width, required double height, required Color color}) {
     return Container(
-      width: 35,
+      width: width,
       height: height,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(width * 0.35),
       ),
     );
   }

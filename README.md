@@ -175,9 +175,111 @@ https://emosync-backend-production.up.railway.app
 
 <hr/>
 
-## 🚀 Cara Install & Jalankan
+## 🚀 Install APK
 
-### 📱 Frontend (Flutter)
+### 📲 Download Langsung (Termudah)
+
+Unduh APK terbaru langsung dari release:
+
+[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.0/app-release.apk) (50MB)
+
+Atau lihat [Releases](https://github.com/iltizamhasan3/emosync/releases) untuk versi lain.
+
+> **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Tidak perlu setup backend lokal.
+
+---
+
+### 🔧 Build dari Source (Windows)
+
+#### 1. Install Prasyarat
+
+| Software | Link Download |
+|----------|--------------|
+| Flutter SDK | [flutter.dev](https://docs.flutter.dev/get-started/install/windows) |
+| Android SDK CLI Tools | [developer.android.com](https://developer.android.com/studio#command-line-tools-only) |
+| JDK 17 | [Microsoft JDK 17](https://aka.ms/download-jdk/microsoft-jdk-17.0.13-windows-x64.zip) |
+
+#### 2. Setup Android SDK
+
+Buka **cmd.exe (Run as Admin)**:
+
+```batch
+:: Buat folder Android
+mkdir C:\Android
+
+:: Extract CLI tools ke C:\Android\cmdline-tools\
+:: Struktur akhir: C:\Android\cmdline-tools\latest\bin\sdkmanager.bat
+
+:: Set environment variables (dijalankan sekali)
+setx ANDROID_HOME C:\Android
+setx JAVA_HOME C:\Android\jdk-17.0.13+11
+```
+
+Tutup cmd, buka ulang **cmd.exe baru**.
+
+#### 3. Install SDK Components
+
+```batch
+:: Setujui lisensi
+C:\Android\cmdline-tools\latest\bin\sdkmanager.bat --sdk_root=C:\Android --licenses
+:: Ketik "y" untuk semua lisensi
+
+:: Install platform & build tools
+C:\Android\cmdline-tools\latest\bin\sdkmanager.bat --sdk_root=C:\Android ^
+    platform-tools platforms;android-34 build-tools;34.0.0
+```
+
+#### 4. Konfigurasi Flutter
+
+```batch
+flutter config --android-sdk=C:\Android
+flutter config --jdk-dir=C:\Android\jdk-17.0.13+11
+```
+
+#### 5. Clone & Build
+
+```batch
+git clone https://github.com/iltizamhasan3/emosync.git
+cd emosync
+
+flutter pub get
+
+:: Build APK release (konek ke Railway - production)
+flutter build apk --release --dart-define=API_BASE_URL=https://emosync-backend-production.up.railway.app/api
+
+:: Build APK release (konek ke backend lokal - development)
+flutter build apk --release --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
+```
+
+APK hasil: `build\app\outputs\flutter-apk\app-release.apk`
+
+#### ⚠️ Troubleshooting
+
+**Error: `JAVA_HOME` invalid**
+Buka `android\gradlew.bat` di Notepad, cari:
+```batch
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
+```
+Ganti `/` jadi `\`:
+```batch
+set JAVA_EXE=%JAVA_HOME%\bin\java.exe
+```
+
+**Error NDK corrupt**
+Hapus folder `C:\Android\ndk\` lalu jalankan ulang build — Gradle akan mendownload ulang otomatis.
+
+**Error Kotlin daemon / incremental cache**
+```batch
+cd emosync
+rmdir /s build
+flutter clean
+flutter pub get
+flutter build apk --release --dart-define=API_BASE_URL=https://emosync-backend-production.up.railway.app/api
+```
+
+---
+
+### 🔧 Build dari Source (Linux / macOS)
 
 ```bash
 # Clone repositori
@@ -187,9 +289,6 @@ cd emosync
 # Install dependencies
 flutter pub get
 
-# Jalankan di emulator
-flutter run
-
 # Build APK release (konek ke Railway)
 flutter build apk --release --dart-define=API_BASE_URL=https://emosync-backend-production.up.railway.app/api
 
@@ -197,19 +296,19 @@ flutter build apk --release --dart-define=API_BASE_URL=https://emosync-backend-p
 flutter build apk --release --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
 ```
 
-> **Note:** `baseUrl` dikontrol via `--dart-define=API_BASE_URL=...`. Default: `http://10.0.2.2:8000/api` (emulator Android).
+APK hasil: `build/app/outputs/flutter-apk/app-release.apk`
 
-### 🖥️ Backend (Laravel)
+> **Note:** `baseUrl` dikontrol via `--dart-define=API_BASE_URL=...`. Default: `http://10.0.2.2:8000/api` (emulator Android), `http://localhost:8000/api` (iOS), atau `https://emosync-backend-production.up.railway.app/api` (production).
+
+---
+
+### 🖥️ Backend (Laravel) — Kalo Mau Run Lokal
 
 ```bash
-# Clone repositori backend
 git clone https://github.com/iltizamhasan3/emosync-backend.git
 cd emosync-backend
 
-# Install dependencies
 composer install
-
-# Setup environment
 cp .env.example .env
 php artisan key:generate
 
@@ -223,6 +322,8 @@ php artisan serve
 ### ☁️ Backend di Railway
 
 Backend sudah terdeploy otomatis via Railway. Setiap push ke branch `main` di [emosync-backend](https://github.com/iltizamhasan3/emosync-backend) akan mendeploy ulang.
+
+**Tidak perlu setup backend sendiri** — APK di atas langsung nyambung ke Railway.
 
 <hr/>
 

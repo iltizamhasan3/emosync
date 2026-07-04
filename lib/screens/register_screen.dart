@@ -171,10 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Color(0xFF4CAF50),
         ),
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+      Navigator.pop(context);
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
