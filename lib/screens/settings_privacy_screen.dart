@@ -211,7 +211,7 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
                           value: _showLastSeen,
                           onChanged: (value) {
                             setState(() => _showLastSeen = value);
-                            // show_last_seen not persisted to backend yet
+                            _savePrivacySetting('show_last_seen', value);
                           },
                           activeColor: const Color(0xFFFF8A65),
                         ),

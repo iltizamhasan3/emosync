@@ -377,11 +377,13 @@ class ApiService {
       final result = _handleResponse(response);
       if (result['success']) {
         final List data = result['data'] ?? [];
-        _setCache('pemicu', result, ttl: _cacheTtlPemicu);
-        return {
+        final parsedData = data.map((e) => PemicuModel.fromJson(e)).toList();
+        final returnData = {
           'success': true,
-          'data': data.map((e) => PemicuModel.fromJson(e)).toList(),
+          'data': parsedData,
         };
+        _setCache('pemicu', returnData, ttl: _cacheTtlPemicu);
+        return returnData;
       }
       return result;
     } catch (e) {
@@ -445,12 +447,14 @@ class ApiService {
       final result = _handleResponse(response);
       if (result['success']) {
         final List data = result['data'] ?? [];
-        _setCache('checkin', result, ttl: _cacheTtlLong);
-        await LocalStorageService.saveCheckinHistory(data);
-        return {
+        final parsedData = data.map((e) => MoodCheckinModel.fromJson(e)).toList();
+        final returnData = {
           'success': true,
-          'data': data.map((e) => MoodCheckinModel.fromJson(e)).toList(),
+          'data': parsedData,
         };
+        _setCache('checkin', returnData, ttl: _cacheTtlLong);
+        await LocalStorageService.saveCheckinHistory(data);
+        return returnData;
       }
       return result;
     } catch (e) {
@@ -486,12 +490,14 @@ class ApiService {
 
       final result = _handleResponse(response);
       if (result['success'] && result['data'] != null) {
-        _setCache('dashboard', result, ttl: _cacheTtlLong);
-        await LocalStorageService.saveDashboard(result['data']);
-        return {
+        final dashboardData = DashboardModel.fromJson(result['data']);
+        final returnData = {
           'success': true,
-          'data': DashboardModel.fromJson(result['data']),
+          'data': dashboardData,
         };
+        _setCache('dashboard', returnData, ttl: _cacheTtlLong);
+        await LocalStorageService.saveDashboard(result['data']);
+        return returnData;
       }
       return result;
     } catch (e) {
@@ -623,11 +629,13 @@ class ApiService {
       final result = _handleResponse(response);
       if (result['success']) {
         final List data = result['data'] ?? [];
-        _setCache('premium_plans', result, ttl: const Duration(seconds: 60));
-        return {
+        final parsedData = data.map((e) => PremiumPlanModel.fromJson(e)).toList();
+        final returnData = {
           'success': true,
-          'data': data.map((e) => PremiumPlanModel.fromJson(e)).toList(),
+          'data': parsedData,
         };
+        _setCache('premium_plans', returnData, ttl: const Duration(seconds: 60));
+        return returnData;
       }
       return result;
     } catch (e) {
@@ -993,13 +1001,35 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
       ).timeout(_timeout);
 
       final result = _handleResponse(response);
-      if (result['success'] && result['data'] != null) {
-        final data = result['data']['data'] ?? result['data'];
-        _setCache('settings', {'success': true, 'data': data});
-        return {
-          'success': true,
-          'data': data,
-        };
+      if (result['success']) {
+        dynamic data = result['data'];
+
+        // Handle nested Laravel 'data' key
+        if (data is Map && data.containsKey('data')) {
+          data = data['data'];
+        }
+
+        // Handle top-level notification/privacy keys
+        if (data == null) {
+          try {
+            final decoded = json.decode(response.body);
+            if (decoded is Map) {
+              final Map<String, dynamic> extracted = {};
+              if (decoded.containsKey('notification')) {
+                extracted['notification'] = decoded['notification'];
+              }
+              if (decoded.containsKey('privacy')) {
+                extracted['privacy'] = decoded['privacy'];
+              }
+              if (extracted.isNotEmpty) data = extracted;
+            }
+          } catch (_) {}
+        }
+
+        if (data != null) {
+          _setCache('settings', {'success': true, 'data': data});
+          return {'success': true, 'data': data};
+        }
       }
       return result;
     } catch (e) {
