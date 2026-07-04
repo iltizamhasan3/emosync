@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user_model.dart';
 import '../models/mood_model.dart';
 import '../models/content_model.dart';
@@ -17,6 +18,7 @@ class ApiService {
   static const Duration _timeout = Duration(seconds: 30);
 
   String? _cachedToken;
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   // ============ CACHE ============
   static const Duration _cacheTtl = Duration(seconds: 30);
@@ -48,8 +50,7 @@ class ApiService {
 
   Future<String?> _getToken() async {
     if (_cachedToken != null) return _cachedToken;
-    final prefs = await SharedPreferences.getInstance();
-    _cachedToken = prefs.getString('auth_token');
+    _cachedToken = await _secureStorage.read(key: 'auth_token');
     return _cachedToken;
   }
 
@@ -143,11 +144,11 @@ class ApiService {
         final userData = data['user'] ?? data['data']['user'] ?? data;
         final tokenData = data['token'] ?? data['data']['token'];
         
-        final prefs = await SharedPreferences.getInstance();
         if (tokenData != null) {
-          await prefs.setString('auth_token', tokenData);
+          await _secureStorage.write(key: 'auth_token', value: tokenData);
           _cachedToken = tokenData;
         }
+        final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_data', json.encode(userData));
         await prefs.setString('user_name', userData['name'] ?? '');
         await prefs.setString('user_username', userData['username'] ?? '');
@@ -184,11 +185,11 @@ class ApiService {
         final userData = data['user'] ?? data['data']['user'] ?? data;
         final tokenData = data['token'] ?? data['data']['token'];
         
-        final prefs = await SharedPreferences.getInstance();
         if (tokenData != null) {
-          await prefs.setString('auth_token', tokenData);
+          await _secureStorage.write(key: 'auth_token', value: tokenData);
           _cachedToken = tokenData;
         }
+        final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_data', json.encode(userData));
         await prefs.setString('user_name', userData['name'] ?? '');
         await prefs.setString('user_username', userData['username'] ?? '');
@@ -216,6 +217,7 @@ class ApiService {
       _cache.clear();
       _pendingRequests.clear();
       _cachedToken = null;
+      await _secureStorage.delete(key: 'auth_token');
       
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('auth_token');
@@ -1029,6 +1031,7 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
         body: json.encode(settings),
       ).timeout(_timeout);
 
+      _invalidateCache('settings');
       return _handleResponse(response);
     } catch (e) {
       if (kDebugMode) debugPrint('❌ UpdatePrivacySettings error: $e');

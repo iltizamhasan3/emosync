@@ -313,7 +313,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onRefresh: _loadUserData,
               color: const Color(0xFFFF8A65),
               child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                 children: [
                   _buildHeader(),

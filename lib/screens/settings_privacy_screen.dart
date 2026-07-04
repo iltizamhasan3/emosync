@@ -35,10 +35,10 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
       final data = result['data'];
       final privacy = data['privacy'] ?? {};
       setState(() {
-        _showOnlineStatus = privacy['show_online_status'] ?? true;
+        _showOnlineStatus = privacy['show_active'] ?? true;
         _showLastSeen = privacy['show_last_seen'] ?? true;
-        _showMoodHistory = privacy['show_mood_history'] ?? true;
-        _allowFriendRequests = privacy['allow_friend_requests'] ?? true;
+        _showMoodHistory = privacy['show_mood'] ?? true;
+        _allowFriendRequests = privacy['allow_requests'] ?? true;
         _isLoading = false;
       });
     } else {
@@ -157,7 +157,7 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
                           value: _showOnlineStatus,
                           onChanged: (value) {
                             setState(() => _showOnlineStatus = value);
-                            _savePrivacySetting('show_online_status', value);
+                            _savePrivacySetting('show_active', value);
                           },
                           activeColor: const Color(0xFFFF8A65),
                         ),
@@ -195,7 +195,7 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
                           value: _showLastSeen,
                           onChanged: (value) {
                             setState(() => _showLastSeen = value);
-                            _savePrivacySetting('show_last_seen', value);
+                            // show_last_seen not persisted to backend yet
                           },
                           activeColor: const Color(0xFFFF8A65),
                         ),
@@ -248,7 +248,7 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
                           value: _showMoodHistory,
                           onChanged: (value) {
                             setState(() => _showMoodHistory = value);
-                            _savePrivacySetting('show_mood_history', value);
+                            _savePrivacySetting('show_mood', value);
                           },
                           activeColor: const Color(0xFFFF8A65),
                         ),
@@ -286,7 +286,7 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
                           value: _allowFriendRequests,
                           onChanged: (value) {
                             setState(() => _allowFriendRequests = value);
-                            _savePrivacySetting('allow_friend_requests', value);
+                            _savePrivacySetting('allow_requests', value);
                           },
                           activeColor: const Color(0xFFFF8A65),
                         ),

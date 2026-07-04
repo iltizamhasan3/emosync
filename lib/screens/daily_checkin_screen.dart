@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
+import '../models/mood_model.dart';
 import 'influence_checkin_screen.dart';
 import 'mood_helper.dart';
 
@@ -82,6 +81,18 @@ class _DailyCheckInPageState extends State<DailyCheckInPage> {
     ];
 
     if (result['success'] && mounted && result['data'] != null && (result['data'] as List).isNotEmpty) {
+      final List<dynamic> apiData = result['data'] as List;
+      // Validasi data dari API punya field id & nama
+      final bool validData = apiData.every((p) => p is PemicuModel);
+      if (!validData) {
+        if (mounted) {
+          setState(() {
+            _pemicuList = defaultPemicu;
+            _isLoadingPemicu = false;
+          });
+        }
+        return;
+      }
       setState(() {
         _pemicuList = List<Map<String, dynamic>>.from(result['data'].map((p) => {
           'id': p.id,

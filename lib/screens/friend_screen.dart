@@ -207,9 +207,8 @@ void _sendMessage(FriendModel friend) {
   }
 
   Future<void> _declineRequest(FriendRequestModel request) async {
-    final deleteId = request.friendshipId ?? request.id;
-    
-    final result = await _apiService.deleteFriend(deleteId);
+    // Gunakan user ID, backend search by user_id/friend_id columns
+    final result = await _apiService.deleteFriend(request.id);
     if (result['success']) {
       await _fetchFriendRequests();
       if (mounted) {
