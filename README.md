@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
   <br/>
-  <img src="https://img.shields.io/badge/v1.0.8-22c55e?style=for-the-badge" alt="v1.0.8"/>
+  <img src="https://img.shields.io/badge/v1.1.0-22c55e?style=for-the-badge" alt="v1.1.0"/>
   <img src="https://img.shields.io/github/v/tag/iltizamhasan3/emosync?style=for-the-badge&label=git&color=8b5cf6" alt="Latest Tag"/>
 </div>
 
