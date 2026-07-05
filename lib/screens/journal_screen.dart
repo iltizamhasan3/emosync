@@ -20,7 +20,6 @@ class _JournalPageState extends State<JournalPage> {
   List<Map<String, dynamic>> _checkins = [];
   List<Map<String, dynamic>> _recentCheckins = [];
   bool _isLoading = true;
-  bool _isPremium = false;
   int _selectedMonth = DateTime.now().month;
   int _selectedYear = DateTime.now().year;
 
@@ -36,11 +35,6 @@ class _JournalPageState extends State<JournalPage> {
     });
     
     try {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      setState(() {
-        _isPremium = authProvider.isPremium;
-      });
-      
       final result = await _apiService.getCheckinHistory();
       
       if (result['success'] && result['data'] != null) {
@@ -242,6 +236,7 @@ class _JournalPageState extends State<JournalPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isPremium = context.watch<AuthProvider>().isPremium;
     return Scaffold(
       backgroundColor: const Color(0xFFFAF9F6),
       body: _isLoading
@@ -263,8 +258,8 @@ class _JournalPageState extends State<JournalPage> {
                       children: [
                         const SizedBox(height: 8),
                         
-                        if (_isPremium) _buildAIInsightBanner(),
-                        if (_isPremium) const SizedBox(height: 24),
+                        if (isPremium) _buildAIInsightBanner(),
+                        if (isPremium) const SizedBox(height: 24),
                         
                         _buildCalendarSection(),
                         const SizedBox(height: 24),
