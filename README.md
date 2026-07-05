@@ -10,6 +10,9 @@
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
   <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios"/>
+  <br/>
+  <img src="https://img.shields.io/badge/release-v1.0.7-22c55e?style=for-the-badge" alt="Release v1.0.7"/>
+  <img src="https://img.shields.io/github/v/tag/iltizamhasan3/emosync?style=for-the-badge&label=tag&color=8b5cf6" alt="Latest Tag"/>
 </div>
 
 <br/>
