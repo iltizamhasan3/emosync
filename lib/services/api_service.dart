@@ -319,6 +319,24 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> updateDeviceToken(String fcmToken) async {
+    try {
+      final headers = await _getHeaders();
+      final response = await http.post(
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.deviceTokens}'),
+        headers: headers,
+        body: json.encode({
+          'device_token': fcmToken,
+        }),
+      ).timeout(_timeout);
+
+      return _handleResponse(response);
+    } catch (e) {
+      if (kDebugMode) debugPrint('❌ UpdateDeviceToken error: $e');
+      return {'success': false, 'message': 'Gagal memperbarui device token'};
+    }
+  }
+
   // ============ PEMICU ============
   Future<Map<String, dynamic>> getPemicu() async {
     if (_pendingRequests.containsKey('pemicu')) {
@@ -460,6 +478,39 @@ class ApiService {
     } catch (e) {
       if (kDebugMode) debugPrint('❌ GetDashboard error: $e');
       return {'success': false, 'message': 'Gagal mengambil data dashboard'};
+    }
+  }
+
+  Future<Map<String, dynamic>> getWeeklyReport() async {
+    if (_pendingRequests.containsKey('weeklyReport')) {
+      return _pendingRequests['weeklyReport']!;
+    }
+
+    try {
+      final future = _fetchWeeklyReport();
+      _pendingRequests['weeklyReport'] = future;
+      
+      final result = await future;
+      _pendingRequests.remove('weeklyReport');
+      return result;
+    } catch (e) {
+      _pendingRequests.remove('weeklyReport');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> _fetchWeeklyReport() async {
+    try {
+      final headers = await _getHeaders();
+      final response = await http.get(
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.reportsWeekly}'),
+        headers: headers,
+      ).timeout(_timeout);
+
+      return _handleResponse(response);
+    } catch (e) {
+      if (kDebugMode) debugPrint('❌ GetWeeklyReport error: $e');
+      return {'success': false, 'message': 'Gagal mengambil laporan mingguan'};
     }
   }
 
@@ -913,6 +964,21 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
     return {'success': false, 'message': 'Gagal menandai pesan sebagai sudah dibaca'};
   }
 }
+
+  Future<Map<String, dynamic>> getChatUnreadList() async {
+    try {
+      final headers = await _getHeaders();
+      final response = await http.get(
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.chatUnreadList}'),
+        headers: headers,
+      ).timeout(_timeout);
+
+      return _handleResponse(response);
+    } catch (e) {
+      if (kDebugMode) debugPrint('❌ getChatUnreadList error: $e');
+      return {'success': false, 'message': 'Gagal mengambil daftar pesan belum dibaca'};
+    }
+  }
 
   // ============ SETTINGS ============
   Future<Map<String, dynamic>> getSettings() async {

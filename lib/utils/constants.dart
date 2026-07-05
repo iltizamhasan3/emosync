@@ -12,6 +12,10 @@ class ApiConstants {
   
   // ============ PROFILE ENDPOINTS ============
   static const String profile = '/profile';
+  static const String deviceTokens = '/device-tokens';
+  
+  // ============ REPORT ENDPOINTS ============
+  static const String reportsWeekly = '/reports/weekly';
   
   // ============ MOOD CHECKIN ENDPOINTS ============
   static const String pemicu = '/pemicu';
