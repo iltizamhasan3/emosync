@@ -98,7 +98,7 @@ class _ContentPageState extends State<ContentPage> {
         });
       }
     } catch (e) {
-      print('Error loading content: $e');
+
       setState(() {
         _errorMessage = 'Terjadi kesalahan: $e';
         _isLoading = false;

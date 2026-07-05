@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/user_model.dart';
 import '../services/local_storage_service.dart';
+import '../screens/onboarding_screen.dart';
 
 class AuthProvider extends ChangeNotifier {
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   final ApiService _apiService = ApiService();
-  
+
   UserModel? _currentUser;
   bool _isLoading = false;
   String? _errorMessage;
+
+  AuthProvider() {
+    _apiService.onUnauthorized = _handleUnauthorized;
+  }
 
   UserModel? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
@@ -121,6 +128,15 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  void _handleUnauthorized() {
+    _currentUser = null;
+    notifyListeners();
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+      (_) => false,
+    );
+  }
+
   void _setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
@@ -129,4 +145,5 @@ class AuthProvider extends ChangeNotifier {
   void _clearError() {
     _errorMessage = null;
   }
+
 }

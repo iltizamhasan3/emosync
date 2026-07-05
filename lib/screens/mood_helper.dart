@@ -126,15 +126,15 @@ class MoodHelper {
   static String getMoodEmoji(MoodType mood) {
     switch (mood) {
       case MoodType.bahagia:
-        return '';
+        return '\u{1F60A}';
       case MoodType.cemas:
-        return '';
+        return '\u{1F630}';
       case MoodType.tenang:
-        return '';
+        return '\u{1F60C}';
       case MoodType.sedih:
-        return '';
+        return '\u{1F622}';
       case MoodType.netral:
-        return '';
+        return '\u{1F610}';
     }
   }
 

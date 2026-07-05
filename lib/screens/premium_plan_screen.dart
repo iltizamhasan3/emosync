@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import '../models/premium_model.dart';
 import 'payment_screen.dart';
 
 class PremiumPlansScreen extends StatefulWidget {
@@ -9,30 +11,38 @@ class PremiumPlansScreen extends StatefulWidget {
 }
 
 class _PremiumPlansScreenState extends State<PremiumPlansScreen> {
+  final ApiService _apiService = ApiService();
   String? _selectedPlanId;
+  List<Map<String, dynamic>> plans = [];
+  bool _isLoadingPlans = true;
 
-  final List<Map<String, dynamic>> plans = const [
-    {
-      'id': 'yearly',
-      'name': 'Yearly Access',
-      'price': 99900,
-      'priceFormatted': 'Rp 99.900',
-      'period': '/ tahun',
-      'duration': 365,
-      'badge': 'BEST VALUE',
-      'saving': 'Hemat 16%',
-    },
-    {
-      'id': 'monthly',
-      'name': 'Monthly Access',
-      'price': 9900,
-      'priceFormatted': 'Rp 9.900',
-      'period': '/ bulan',
-      'duration': 30,
-      'badge': null,
-      'saving': null,
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadPlans();
+  }
+
+  Future<void> _loadPlans() async {
+    final result = await _apiService.getPremiumPlans();
+    if (result['success'] && result['data'] != null) {
+      final List<PremiumPlanModel> fetchedPlans = result['data'];
+      setState(() {
+        plans = fetchedPlans.map((p) => {
+          'id': p.id,
+          'name': p.name,
+          'price': p.price,
+          'priceFormatted': p.priceFormatted,
+          'period': p.period,
+          'duration': p.durationDays,
+          'badge': p.badge,
+          'saving': p.saving,
+        }).toList();
+        _isLoadingPlans = false;
+      });
+    } else {
+      setState(() => _isLoadingPlans = false);
+    }
+  }
 
   Map<String, dynamic>? get _selectedPlan {
     if (_selectedPlanId == null) return null;
@@ -92,7 +102,9 @@ class _PremiumPlansScreenState extends State<PremiumPlansScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: _isLoadingPlans
+          ? const Center(child: CircularProgressIndicator(strokeWidth: 3, valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF8A65))))
+          : SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(

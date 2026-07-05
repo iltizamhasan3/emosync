@@ -3,7 +3,6 @@ import 'dart:convert';
 import '../screens/mood_helper.dart';
 
 class LocalStorageService {
-  static const String _keyUser = 'user';
   static const String _keyUserName = 'user_name';
   static const String _keyUserUsername = 'user_username';
   static const String _keyUserEmail = 'user_email';
@@ -30,14 +29,6 @@ class LocalStorageService {
     String? premiumPlan,
   }) async {
     final prefs = await _getPrefs();
-    await prefs.setString(_keyUser, jsonEncode({
-      'name': name,
-      'username': username,
-      'email': email,
-      'avatar': avatar,
-      'is_premium': isPremium,
-      'premium_plan': premiumPlan,
-    }));
     await prefs.setString(_keyUserName, name);
     await prefs.setString(_keyUserUsername, username);
     await prefs.setString(_keyUserEmail, email);
@@ -79,7 +70,6 @@ class LocalStorageService {
 
   static Future<void> clearUser() async {
     final prefs = await _getPrefs();
-    await prefs.remove(_keyUser);
     await prefs.remove(_keyUserName);
     await prefs.remove(_keyUserUsername);
     await prefs.remove(_keyUserEmail);
@@ -202,50 +192,6 @@ class LocalStorageService {
   static Future<int> getStreak() async {
     final prefs = await _getPrefs();
     return prefs.getInt(_keyStreak) ?? 0;
-  }
-
-  // ============ DEMO FUNCTIONS ============
-  static Future<void> skipToTomorrow() async {
-    final prefs = await _getPrefs();
-    final checkins = await getCheckins();
-    final today = DateTime.now();
-    final todayStart = DateTime(today.year, today.month, today.day);
-    final todayEnd = DateTime(today.year, today.month, today.day, 23, 59, 59);
-    
-    final filteredCheckins = checkins.where((checkin) {
-      final checkinDate = DateTime.parse(checkin['date']);
-      return !(checkinDate.isAfter(todayStart) && checkinDate.isBefore(todayEnd));
-    }).toList();
-    
-    await prefs.setString(_keyCheckins, jsonEncode(filteredCheckins));
-    await prefs.remove(_keyLastCheckinDate);
-  }
-
-  static Future<void> generateDummyData() async {
-    final moods = ['Happy', 'Anxious', 'Calm', 'Sad'];
-    final factors = ['Work', 'Study', 'Sleep', 'Exercise', 'Caffeine', 'Social'];
-    
-    await resetCheckinsOnly();
-    
-    for (int i = 0; i < 30; i++) {
-      final date = DateTime.now().subtract(Duration(days: i));
-      final randomMood = moods[i % moods.length];
-      final randomFactors = [factors[i % factors.length], factors[(i + 2) % factors.length]];
-      
-      await saveCheckin(
-        mood: randomMood,
-        factors: randomFactors,
-        journal: 'Demo check-in untuk tanggal ${date.day}/${date.month}',
-        date: date,
-      );
-    }
-  }
-
-  static Future<void> resetCheckinsOnly() async {
-    final prefs = await _getPrefs();
-    await prefs.remove(_keyCheckins);
-    await prefs.remove(_keyLastCheckinDate);
-    await prefs.setInt(_keyStreak, 0);
   }
 
   static Future<void> resetAllData() async {

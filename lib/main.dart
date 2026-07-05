@@ -17,6 +17,7 @@ class EmoSyncApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(
+        navigatorKey: AuthProvider.navigatorKey,
         title: 'EmoSync',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

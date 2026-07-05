@@ -7,6 +7,7 @@ import '../models/user_model.dart';
 import '../models/mood_model.dart';
 import '../models/content_model.dart';
 import '../models/friend_model.dart';
+import '../models/premium_model.dart';
 import '../utils/constants.dart';
 import 'local_storage_service.dart';
 
@@ -19,36 +20,9 @@ class ApiService {
 
   String? _cachedToken;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  Function()? onUnauthorized;
 
-  // ============ CACHE ============
-  static const Duration _cacheTtl = Duration(seconds: 30);
-  static const Duration _cacheTtlLong = Duration(seconds: 300);
-  static const Duration _cacheTtlPemicu = Duration(seconds: 600);
-  final Map<String, _CacheEntry> _cache = {};
   final Map<String, Future<Map<String, dynamic>>> _pendingRequests = {};
-
-  Map<String, dynamic>? _getCached(String key) {
-    final entry = _cache[key];
-    if (entry != null && !entry.isExpired) {
-      return entry.data;
-    }
-    _cache.remove(key);
-    return null;
-  }
-
-  void _setCache(String key, Map<String, dynamic> data, {Duration? ttl}) {
-    _cache[key] = _CacheEntry(data, ttl ?? _cacheTtl);
-  }
-
-  void _invalidateCache(String key) {
-    _cache.remove(key);
-    _pendingRequests.remove(key);
-  }
-
-  void _invalidatePrefix(String prefix) {
-    _cache.removeWhere((k, _) => k.startsWith(prefix));
-    _pendingRequests.removeWhere((k, _) => k.startsWith(prefix));
-  }
 
   Future<String?> _getToken() async {
     if (_cachedToken != null) return _cachedToken;
@@ -94,6 +68,9 @@ class ApiService {
         };
       }
     } else if (response.statusCode == 401) {
+      _cachedToken = null;
+      _secureStorage.delete(key: 'auth_token');
+      onUnauthorized?.call();
       return {
         'success': false,
         'message': 'Sesi telah berakhir, silakan login kembali',
@@ -216,7 +193,6 @@ class ApiService {
         headers: headers,
       ).timeout(_timeout);
       
-      _cache.clear();
       _pendingRequests.clear();
       _cachedToken = null;
       await _secureStorage.delete(key: 'auth_token');
@@ -268,9 +244,6 @@ class ApiService {
 
   // ============ PROFILE ============
   Future<Map<String, dynamic>> getProfile() async {
-    final cached = _getCached('profile');
-    if (cached != null) return cached;
-
     if (_pendingRequests.containsKey('profile')) {
       return _pendingRequests['profile']!;
     }
@@ -300,7 +273,6 @@ class ApiService {
         await prefs.setString('user_username', data['username'] ?? '');
         await prefs.setString('user_email', data['email'] ?? '');
         await prefs.setString('user_avatar', data['avatar'] ?? 'male');
-        _setCache('profile', result, ttl: _cacheTtlLong);
         return {
           'success': true,
           'data': data,
@@ -338,7 +310,6 @@ class ApiService {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_name', data['name'] ?? name);
         await prefs.setString('user_avatar', data['avatar'] ?? avatar);
-        _invalidateCache('profile');
       }
       
       return result;
@@ -350,9 +321,6 @@ class ApiService {
 
   // ============ PEMICU ============
   Future<Map<String, dynamic>> getPemicu() async {
-    final cached = _getCached('pemicu');
-    if (cached != null) return cached;
-
     if (_pendingRequests.containsKey('pemicu')) {
       return _pendingRequests['pemicu']!;
     }
@@ -382,7 +350,6 @@ class ApiService {
           'success': true,
           'data': parsedData,
         };
-        _setCache('pemicu', returnData, ttl: _cacheTtlPemicu);
         return returnData;
       }
       return result;
@@ -410,8 +377,6 @@ class ApiService {
         }),
       ).timeout(_timeout);
 
-      _invalidateCache('checkin');
-      _invalidateCache('dashboard');
       return _handleResponse(response);
     } catch (e) {
       if (kDebugMode) debugPrint('❌ CreateCheckin error: $e');
@@ -420,9 +385,6 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> getCheckinHistory() async {
-    final cached = _getCached('checkin');
-    if (cached != null) return cached;
-
     if (_pendingRequests.containsKey('checkin')) {
       return _pendingRequests['checkin']!;
     }
@@ -452,7 +414,6 @@ class ApiService {
           'success': true,
           'data': parsedData,
         };
-        _setCache('checkin', returnData, ttl: _cacheTtlLong);
         await LocalStorageService.saveCheckinHistory(data);
         return returnData;
       }
@@ -464,9 +425,6 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> getDashboard() async {
-    final cached = _getCached('dashboard');
-    if (cached != null) return cached;
-
     if (_pendingRequests.containsKey('dashboard')) {
       return _pendingRequests['dashboard']!;
     }
@@ -495,7 +453,6 @@ class ApiService {
           'success': true,
           'data': dashboardData,
         };
-        _setCache('dashboard', returnData, ttl: _cacheTtlLong);
         await LocalStorageService.saveDashboard(result['data']);
         return returnData;
       }
@@ -508,9 +465,6 @@ class ApiService {
 
   // ============ CONTENT ============
   Future<Map<String, dynamic>> getContents() async {
-    final cached = _getCached('contents');
-    if (cached != null) return cached;
-
     if (_pendingRequests.containsKey('contents')) {
       return _pendingRequests['contents']!;
     }
@@ -544,7 +498,6 @@ class ApiService {
               contents.add(ContentModel.fromJson(item));
             }
           }
-          _setCache('contents', {'success': true, 'data': contents}, ttl: _cacheTtlLong);
           return {'success': true, 'data': contents};
         } else if (decoded is Map && decoded.containsKey('data')) {
           final dataList = decoded['data'];
@@ -555,7 +508,6 @@ class ApiService {
                 contents.add(ContentModel.fromJson(item));
               }
             }
-            _setCache('contents', {'success': true, 'data': contents}, ttl: _cacheTtlLong);
             return {'success': true, 'data': contents};
           }
         }
@@ -594,9 +546,6 @@ class ApiService {
 
   // ============ PREMIUM ============
   Future<Map<String, dynamic>> getPremiumStatus() async {
-    final cached = _getCached('premium_status');
-    if (cached != null) return cached;
-
     try {
       final headers = await _getHeaders();
       final response = await http.get(
@@ -606,7 +555,6 @@ class ApiService {
 
       final result = _handleResponse(response);
       if (result['success']) {
-        _setCache('premium_status', result);
       }
       return result;
     } catch (e) {
@@ -616,9 +564,6 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> getPremiumPlans() async {
-    final cached = _getCached('premium_plans');
-    if (cached != null) return cached;
-
     try {
       final headers = await _getHeaders();
       final response = await http.get(
@@ -634,7 +579,6 @@ class ApiService {
           'success': true,
           'data': parsedData,
         };
-        _setCache('premium_plans', returnData, ttl: const Duration(seconds: 60));
         return returnData;
       }
       return result;
@@ -663,7 +607,6 @@ class ApiService {
         if (result['data'] != null) {
           await prefs.setString('premium_plan', result['data']['plan'] ?? plan);
         }
-        _invalidateCache('premium_status');
       }
       return result;
     } catch (e) {
@@ -685,7 +628,6 @@ class ApiService {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('is_premium', false);
         await prefs.remove('premium_plan');
-        _invalidateCache('premium_status');
       }
       return result;
     } catch (e) {
@@ -696,9 +638,6 @@ class ApiService {
 
   // ============ FRIENDSHIP ============
   Future<Map<String, dynamic>> getFriends() async {
-    final cached = _getCached('friends');
-    if (cached != null) return cached;
-
     if (_pendingRequests.containsKey('friends')) {
       return _pendingRequests['friends']!;
     }
@@ -740,7 +679,6 @@ class ApiService {
             }
           }
            
-           _setCache('friends', {'success': true, 'data': friends}, ttl: _cacheTtlLong);
            return {'success': true, 'data': friends};
         }
       }
@@ -764,8 +702,6 @@ class ApiService {
       if (kDebugMode) debugPrint('📱 AddFriend - Status: ${response.statusCode}');
       if (kDebugMode) debugPrint('📱 AddFriend - Body: ${response.body}');
 
-      _invalidateCache('friends');
-      _invalidateCache('friend_requests');
       return _handleResponse(response);
     } catch (e) {
       if (kDebugMode) debugPrint('❌ AddFriend error: $e');
@@ -813,8 +749,6 @@ class ApiService {
       if (kDebugMode) debugPrint('📱 DeleteFriend - Status: ${response.statusCode}');
       if (kDebugMode) debugPrint('📱 DeleteFriend - Body: ${response.body}');
 
-      _invalidateCache('friends');
-      _invalidateCache('friend_requests');
       return _handleResponse(response);
     } catch (e) {
       if (kDebugMode) debugPrint('❌ DeleteFriend error: $e');
@@ -823,9 +757,6 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> getFriendRequests() async {
-    final cached = _getCached('friend_requests');
-    if (cached != null) return cached;
-
     if (_pendingRequests.containsKey('friend_requests')) {
       return _pendingRequests['friend_requests']!;
     }
@@ -867,7 +798,6 @@ class ApiService {
             }
           }
            
-           _setCache('friend_requests', {'success': true, 'data': requests}, ttl: _cacheTtlLong);
            return {'success': true, 'data': requests};
         }
       }
@@ -890,8 +820,6 @@ class ApiService {
       if (kDebugMode) debugPrint('📱 AcceptFriendRequest - Status: ${response.statusCode}');
       if (kDebugMode) debugPrint('📱 AcceptFriendRequest - Body: ${response.body}');
 
-      _invalidateCache('friends');
-      _invalidateCache('friend_requests');
       return _handleResponse(response);
     } catch (e) {
       if (kDebugMode) debugPrint('❌ AcceptFriendRequest error: $e');
@@ -901,10 +829,6 @@ class ApiService {
 
   // ============ CHAT ============
 Future<Map<String, dynamic>> getChatMessages(int friendId) async {
-  final cacheKey = 'chat_$friendId';
-  final cached = _getCached(cacheKey);
-  if (cached != null) return cached;
-
   try {
     final headers = await _getHeaders();
     final response = await http.get(
@@ -917,7 +841,6 @@ Future<Map<String, dynamic>> getChatMessages(int friendId) async {
 
     final result = _handleResponse(response);
     if (result['success']) {
-      _setCache(cacheKey, result, ttl: const Duration(seconds: 15));
     }
     return result;
   } catch (e) {
@@ -941,8 +864,6 @@ Future<Map<String, dynamic>> sendMessage(int friendId, String message) async {
       if (kDebugMode) debugPrint('📱 sendMessage - Status: ${response.statusCode}');
     if (kDebugMode) debugPrint('📱 sendMessage - Body: ${response.body}');
 
-    _invalidatePrefix('chat_');
-    _invalidateCache('unread_messages');
     return _handleResponse(response);
   } catch (e) {
     if (kDebugMode) debugPrint('❌ sendMessage error: $e');
@@ -951,9 +872,6 @@ Future<Map<String, dynamic>> sendMessage(int friendId, String message) async {
 }
 
 Future<Map<String, dynamic>> getUnreadMessages() async {
-  final cached = _getCached('unread_messages');
-  if (cached != null) return cached;
-
   try {
     final headers = await _getHeaders();
     final response = await http.get(
@@ -963,7 +881,6 @@ Future<Map<String, dynamic>> getUnreadMessages() async {
 
     final result = _handleResponse(response);
     if (result['success']) {
-      _setCache('unread_messages', result, ttl: const Duration(seconds: 15));
     }
     return result;
   } catch (e) {
@@ -980,7 +897,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
       headers: headers,
     ).timeout(_timeout);
 
-    _invalidateCache('unread_messages');
     return _handleResponse(response);
   } catch (e) {
     if (kDebugMode) debugPrint('❌ markMessagesAsRead error: $e');
@@ -990,9 +906,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
   // ============ SETTINGS ============
   Future<Map<String, dynamic>> getSettings() async {
-    final cached = _getCached('settings');
-    if (cached != null) return cached;
-
     try {
       final headers = await _getHeaders();
       final response = await http.get(
@@ -1027,7 +940,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
         }
 
         if (data != null) {
-          _setCache('settings', {'success': true, 'data': data});
           return {'success': true, 'data': data};
         }
       }
@@ -1047,7 +959,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
         body: json.encode(settings),
       ).timeout(_timeout);
 
-      _invalidateCache('settings');
       return _handleResponse(response);
     } catch (e) {
       if (kDebugMode) debugPrint('❌ UpdateNotificationSettings error: $e');
@@ -1064,7 +975,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
         body: json.encode(settings),
       ).timeout(_timeout);
 
-      _invalidateCache('settings');
       return _handleResponse(response);
     } catch (e) {
       if (kDebugMode) debugPrint('❌ UpdatePrivacySettings error: $e');
@@ -1075,9 +985,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
   // Get payment plans
   Future<Map<String, dynamic>> getPaymentPlans() async {
-    final cached = _getCached('payment_plans');
-    if (cached != null) return cached;
-
     try {
       final headers = await _getHeaders();
       final response = await http.get(
@@ -1090,7 +997,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
       final result = _handleResponse(response);
       if (result['success']) {
-        _setCache('payment_plans', result, ttl: const Duration(seconds: 60));
       }
       return result;
     } catch (e) {
@@ -1120,7 +1026,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
       return _handleResponse(response);
     } catch (e) {
-      _invalidateCache('transaction_history');
       if (kDebugMode) debugPrint('❌ createTransaction error: $e');
       return {'success': false, 'message': 'Gagal membuat transaksi'};
     }
@@ -1159,8 +1064,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
       return _handleResponse(response);
     } catch (e) {
-      _invalidateCache('premium_status');
-      _invalidateCache('transaction_history');
       if (kDebugMode) debugPrint('❌ simulatePayment error: $e');
       return {'success': false, 'message': 'Gagal memproses pembayaran'};
     }
@@ -1180,7 +1083,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
       return _handleResponse(response);
     } catch (e) {
-      _invalidateCache('transaction_history');
       if (kDebugMode) debugPrint('❌ cancelTransaction error: $e');
       return {'success': false, 'message': 'Gagal membatalkan transaksi'};
     }
@@ -1188,9 +1090,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
   // Get user transaction history
   Future<Map<String, dynamic>> getTransactionHistory() async {
-    final cached = _getCached('transaction_history');
-    if (cached != null) return cached;
-
     try {
       final headers = await _getHeaders();
       final response = await http.get(
@@ -1203,7 +1102,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
 
       final result = _handleResponse(response);
       if (result['success']) {
-        _setCache('transaction_history', result);
       }
       return result;
     } catch (e) {
@@ -1211,13 +1109,4 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
       return {'success': false, 'message': 'Gagal mengambil riwayat transaksi'};
     }
   }
-}
-
-class _CacheEntry {
-  final Map<String, dynamic> data;
-  final DateTime expiry;
-
-  _CacheEntry(this.data, Duration ttl) : expiry = DateTime.now().add(ttl);
-
-  bool get isExpired => DateTime.now().isAfter(expiry);
 }

@@ -52,25 +52,21 @@ class _FriendPageState extends State<FriendPage> {
 
   Future<void> _fetchFriends() async {
     final result = await _apiService.getFriends();
-    print('📱 getFriends - success: ${result['success']}');
-    
+
     if (result['success']) {
       final data = result['data'];
       if (data is List) {
         setState(() {
           _allFriends = data.cast<FriendModel>();
           _filteredFriends = List.from(_allFriends);
-          print('📱 Total friends after setState: ${_allFriends.length}');
         });
       } else {
-        print('❌ Data is not a List, it is: ${data.runtimeType}');
         setState(() {
           _allFriends = [];
           _filteredFriends = [];
         });
       }
     } else {
-      print('❌ getFriends failed: ${result['message']}');
       setState(() {
         _allFriends = [];
         _filteredFriends = [];
@@ -80,23 +76,19 @@ class _FriendPageState extends State<FriendPage> {
 
   Future<void> _fetchFriendRequests() async {
     final result = await _apiService.getFriendRequests();
-    print('📱 getFriendRequests - success: ${result['success']}');
-    
+
     if (result['success']) {
       final data = result['data'];
       if (data is List) {
         setState(() {
           _friendRequests = data.cast<FriendRequestModel>();
-          print('📱 Total friend requests after setState: ${_friendRequests.length}');
         });
       } else {
-        print('❌ Data is not a List, it is: ${data.runtimeType}');
         setState(() {
           _friendRequests = [];
         });
       }
     } else {
-      print('❌ getFriendRequests failed: ${result['message']}');
       setState(() {
         _friendRequests = [];
       });
@@ -175,8 +167,6 @@ void _sendMessage(FriendModel friend) {
     });
     
     final friendshipId = request.friendshipId ?? request.id;
-    
-    print('✅ Accepting request - User ID: ${request.id}, Friendship ID: $friendshipId');
     
     final result = await _apiService.acceptFriendRequest(friendshipId);
     
@@ -414,16 +404,9 @@ void _sendMessage(FriendModel friend) {
 
   @override
   Widget build(BuildContext context) {
-    print('🔍 BUILD - selectedTab: $_selectedTabIndex');
-    print('🔍 BUILD - friendRequests length: ${_friendRequests.length}');
-    print('🔍 BUILD - allFriends length: ${_allFriends.length}');
-    print('🔍 BUILD - isLoading: $_isLoading');
-    
     final displayList = _selectedTabIndex == 0 
         ? (_searchQuery.isEmpty ? _filteredFriends : _searchResults)
         : _friendRequests;
-
-    print('🔍 BUILD - displayList length: ${displayList.length}');
 
     return Scaffold(
       backgroundColor: const Color(0xFFFAF9F6),
@@ -618,9 +601,6 @@ void _sendMessage(FriendModel friend) {
   }
 
   Widget _buildFriendList(dynamic items) {
-    print('🔍 _buildFriendList - items length: ${items.length}');
-    print('🔍 _buildFriendList - selectedTabIndex: $_selectedTabIndex');
-    
     if (items.isEmpty) {
       return _buildEmptyState();
     }
@@ -812,7 +792,6 @@ void _sendMessage(FriendModel friend) {
   }
 
   Widget _buildRequestCard(FriendRequestModel request) {
-    print('🔍 _buildRequestCard - Request: ${request.name}, Status: ${request.status}');
     
     final avatar = request.avatar ?? 'male';
     

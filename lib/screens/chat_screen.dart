@@ -64,7 +64,6 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       }
     } catch (e) {
-      print('Error loading messages: $e');
       setState(() {
         _messages = [];
         _isLoading = false;
@@ -139,7 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
         }
         _isSending = false;
       });
-      print('Error sending message: $e');
+
     }
   }
 

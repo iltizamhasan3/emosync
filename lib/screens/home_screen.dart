@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
         });
       }
     } catch (e) {
-      print('Error loading cached data: $e');
+
     }
 
     // Jika tidak ada data cache, kita tampilkan loading spinner penuh
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
         _updateCheckinState(checkins);
       }
     } catch (e) {
-      print('Error loading dynamic data: $e');
+
     } finally {
       if (mounted) {
         setState(() {
