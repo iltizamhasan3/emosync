@@ -5,13 +5,9 @@
   <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart"/>
   <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"/>
   <br/>
-  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP"/>
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
-  <br/>
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind"/>
-  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios"/>
   <br/>
   <img src="https://img.shields.io/badge/v1.0.8-22c55e?style=for-the-badge" alt="v1.0.8"/>
   <img src="https://img.shields.io/github/v/tag/iltizamhasan3/emosync?style=for-the-badge&label=git&color=8b5cf6" alt="Latest Tag"/>
@@ -104,8 +100,12 @@
 | Teknologi | Kegunaan |
 |-----------|----------|
 | [Laravel 13](https://laravel.com/) | Framework PHP |
-| [Sanctum](https://laravel.com/docs/sanctum) | Autentikasi API token |
-| [PostgreSQL](https://www.postgresql.org/) / [MySQL](https://www.mysql.com/) | Database relasional |
+| [PHP ^8.3](https://www.php.net/) | Bahasa pemrograman |
+| [Sanctum ^4.0](https://laravel.com/docs/sanctum) | Autentikasi API token |
+| [PostgreSQL (Supabase)](https://supabase.com/) | Database utama (production) |
+| [MySQL 8.0](https://www.mysql.com/) | Database lokal (dev) |
+| [Supabase Storage (S3)](https://supabase.com/) | File & media storage |
+| [Docker](https://www.docker.com/) | Containerization (Nginx + PHP-FPM) |
 
 ### 🎨 Admin Panel — Web SPA (React)
 | Teknologi | Kegunaan |
