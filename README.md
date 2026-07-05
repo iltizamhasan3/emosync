@@ -78,7 +78,7 @@
 
 ## 🛠️ Tech Stack
 
-### 📱 Frontend (Flutter)
+### 📱 Frontend — Mobile App (Flutter)
 | Teknologi | Kegunaan |
 |-----------|----------|
 | [Flutter](https://flutter.dev/) | Framework UI cross-platform |
@@ -89,13 +89,21 @@
 | [FL Chart](https://pub.dev/packages/fl_chart) | Grafik & visualisasi data |
 | [URL Launcher](https://pub.dev/packages/url_launcher) | Membuka link eksternal |
 
-### 🖥️ Backend (Laravel)
+### 🖥️ Backend — REST API (Laravel)
 | Teknologi | Kegunaan |
 |-----------|----------|
 | [Laravel 13](https://laravel.com/) | Framework PHP |
 | [Sanctum](https://laravel.com/docs/sanctum) | Autentikasi API token |
 | [PostgreSQL](https://www.postgresql.org/) / [MySQL](https://www.mysql.com/) | Database relasional |
-| [REST API](https://laravel.com/docs/routing) | Arsitektur API |
+
+### 🎨 Admin Panel — Web SPA (React)
+| Teknologi | Kegunaan |
+|-----------|----------|
+| [React 19](https://react.dev/) | UI framework |
+| [Vite](https://vitejs.dev/) | Build tool & HMR |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS |
+| [React Router](https://reactrouter.com/) | Routing SPA |
+| [Axios](https://axios-http.com/) | HTTP client + interceptor |
 
 <hr/>
 
