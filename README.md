@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
   <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase"/>
   <img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway"/>
-  <img src="https://img.shields.io/badge/Release-v1.0.6-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.6"/>
+  <img src="https://img.shields.io/badge/Release-v1.0.7-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.7"/>
 </div>
 
 <br/>
@@ -197,13 +197,13 @@ https://emosync-backend-production.up.railway.app
 
 Unduh APK terbaru langsung dari release:
 
-[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.6/app-release.apk) (54MB)
+[Download app-release.apk](https://github.com/iltizamhasan3/emosync/releases/download/v1.0.7/app-release.apk) (53.8MB)
 
 Atau lihat [Releases](https://github.com/iltizamhasan3/emosync/releases) untuk versi lain.
 
 > **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Database pakai Supabase PostgreSQL. Tidak perlu setup backend lokal.
 >
-> **Versi:** 1.0.6 | **Build:** `1.0.6+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2 | **Laravel:** 13
+> **Versi:** 1.0.7 | **Build:** `1.0.7+1` | **Ukuran:** 53.8MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2 | **Laravel:** 13
 
 ---
 
