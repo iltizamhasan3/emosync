@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/notification_service.dart';
 
 class NotificationsSettingsPage extends StatefulWidget {
   const NotificationsSettingsPage({super.key});
@@ -79,9 +80,21 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     switch (key) {
       case 'daily_reminder':
         settings = {'daily_reminder': value};
+        if (value) {
+          await NotificationService.scheduleDailyReminder(
+            time: const TimeOfDay(hour: 9, minute: 0),
+          );
+        } else {
+          await NotificationService.cancel(0);
+        }
         break;
       case 'weekly_report':
         settings = {'weekly_report': value};
+        if (value) {
+          await NotificationService.scheduleWeeklyReport(dayOfWeek: DateTime.monday);
+        } else {
+          await NotificationService.cancel(1);
+        }
         break;
       case 'friend_activity':
         settings = {'friend_activity': value};

@@ -666,19 +666,29 @@ class ApiService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> decoded = json.decode(response.body);
         
+        if (kDebugMode) {
+          debugPrint('📱 getFriends - Raw: ${response.body}');
+        }
+        
         if (decoded['success'] == true) {
           final data = decoded['data'];
           List<FriendModel> friends = [];
           
           if (data is List) {
-            friends = data.map((e) => FriendModel.fromJson(e)).toList();
+            friends = data.map((e) {
+              if (kDebugMode) debugPrint('📱 Friend item: $e');
+              return FriendModel.fromJson(e);
+            }).toList();
           } else if (data is Map) {
             final innerData = data['data'];
             if (innerData is List) {
-              friends = innerData.map((e) => FriendModel.fromJson(e)).toList();
+              friends = innerData.map((e) {
+                if (kDebugMode) debugPrint('📱 Friend item (nested): $e');
+                return FriendModel.fromJson(e);
+              }).toList();
             }
           }
-           
+            
            return {'success': true, 'data': friends};
         }
       }

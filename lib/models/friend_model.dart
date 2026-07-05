@@ -23,8 +23,8 @@ class FriendModel {
       name: json['name'] ?? '',
       username: json['username'] ?? '',
       avatar: json['avatar'] ?? 'male',
-      mood: json['mood'],
-      lastCheckin: json['last_checkin'],
+      mood: json['mood'] ?? json['mood_type'],
+      lastCheckin: json['last_checkin'] ?? json['last_checkin_at'],
       isPremium: json['is_premium'] ?? false,
     );
   }

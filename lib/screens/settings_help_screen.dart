@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HelpCenterPage extends StatelessWidget {
   const HelpCenterPage({super.key});
@@ -52,49 +51,6 @@ class HelpCenterPage extends StatelessWidget {
               question: 'Apakah data saya aman?',
               answer: 'Ya, semua data Anda dienkripsi dan hanya dapat diakses oleh Anda. Kami tidak akan membagikan data Anda dengan pihak ketiga tanpa izin.',
               icon: Icons.security,
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // Contact Section
-            _buildSectionHeader('HUBUNGI KAMI'),
-            
-            _buildContactCard(
-              icon: Icons.email,
-              title: 'Email',
-              subtitle: 'support@emosync.com',
-              onTap: () async {
-                final Uri emailUri = Uri(
-                  scheme: 'mailto',
-                  path: 'support@emosync.com',
-                  query: 'subject=Bantuan EmoSync',
-                );
-                if (await canLaunchUrl(emailUri)) {
-                  await launchUrl(emailUri);
-                }
-              },
-            ),
-            _buildContactCard(
-              icon: Icons.web,
-              title: 'Website',
-              subtitle: 'www.emosync.com',
-              onTap: () async {
-                final Uri url = Uri.parse('https://www.emosync.com');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                }
-              },
-            ),
-            _buildContactCard(
-              icon: Icons.camera_alt,
-              title: 'Instagram',
-              subtitle: '@emosync',
-              onTap: () async {
-                final Uri url = Uri.parse('https://instagram.com/emosync');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                }
-              },
             ),
             
             const SizedBox(height: 16),
@@ -231,66 +187,6 @@ class HelpCenterPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildContactCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: const Color(0xFFE0E0E0).withValues(alpha: 0.3),
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: const Color(0xFFFF8A65).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Icon(icon, color: const Color(0xFFFF8A65), size: 22),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF3E2F2B),
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF6D5B56),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: Color(0xFFC3ADA7), size: 20),
-          ],
-        ),
       ),
     );
   }
