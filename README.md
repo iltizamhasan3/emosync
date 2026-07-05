@@ -6,8 +6,6 @@
   <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"/>
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
   <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase"/>
-  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis"/>
-  <img src="https://img.shields.io/badge/Upstash-00E9A3?style=for-the-badge&logo=upstash&logoColor=white" alt="Upstash"/>
   <img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway"/>
   <img src="https://img.shields.io/badge/Release-v1.0.6-4CAF50?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.6"/>
 </div>
@@ -115,8 +113,8 @@
 | [Sanctum](https://laravel.com/docs/sanctum) | Autentikasi API token |
 | [PostgreSQL](https://www.postgresql.org/) | Database relasional via Supabase |
 | [Supabase](https://supabase.com/) | Hosting database PostgreSQL (free tier 500MB) |
-| [Redis](https://redis.io/) | Cache & session via Upstash |
-| [Upstash](https://upstash.com/) | Redis serverless (free tier 100MB) |
+| [File Cache](https://laravel.com/docs/cache) | Cache driver |
+| [Database Session](https://laravel.com/docs/session) | Session driver |
 | [REST API](https://laravel.com/docs/routing) | Arsitektur API |
 
 ### ☁️ Deployment & Hosting
@@ -141,9 +139,8 @@ https://emosync-backend-production.up.railway.app
 |---------|----------|
 | 🖥️ Laravel Backend | [Railway](https://railway.app/) (serverless dormant) |
 | 🐘 Database PostgreSQL | [Supabase](https://supabase.com/) (free tier 500MB) |
-| ⚡ Redis Cache & Session | [Upstash](https://upstash.com/) (free tier 100MB) |
 
-> 💡 Backend di-serverless-kan — credit Railway dipakai per-detik CPU, bukan fixed. Database Supabase & Upstash pun serverless & dormant saat tidak dipakai.
+> 💡 Backend di-serverless-kan — credit Railway dipakai per-detik CPU, bukan fixed. Database Supabase juga serverless & dormant saat tidak dipakai.
 
 <hr/>
 
@@ -204,7 +201,7 @@ Unduh APK terbaru langsung dari release:
 
 Atau lihat [Releases](https://github.com/iltizamhasan3/emosync/releases) untuk versi lain.
 
-> **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Database pakai Supabase PostgreSQL, cache & session pakai Upstash Redis. Tidak perlu setup backend lokal.
+> **Catatan:** APK ini terkoneksi ke backend Railway (`https://emosync-backend-production.up.railway.app/api`). Database pakai Supabase PostgreSQL. Tidak perlu setup backend lokal.
 >
 > **Versi:** 1.0.6 | **Build:** `1.0.6+1` | **Ukuran:** 54MB | **Flutter:** 3.44.4 | **Dart:** 3.12.2 | **Laravel:** 13
 
@@ -346,7 +343,6 @@ php artisan serve
 |-------|----------|
 | **Laravel** | Railway (serverless) |
 | **DB** | Supabase PostgreSQL |
-| **Cache/Session** | Upstash Redis |
 
 <hr/>
 
