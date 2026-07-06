@@ -203,11 +203,7 @@ class _HomePageState extends State<HomePage> {
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF8A65)),
               ),
             )
-          : RefreshIndicator(
-              onRefresh: _refreshData,
-              color: const Color(0xFFFF8A65),
-              child: _buildBody(),
-            ),
+          : _buildBody(),
       bottomNavigationBar: _buildBottomNav(),
     );
   }
@@ -226,9 +222,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHomeTab() {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Column(
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      color: const Color(0xFFFF8A65),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
         children: [
           _buildHeader(),
           
@@ -313,7 +312,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildHeader() {

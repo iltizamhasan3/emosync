@@ -172,47 +172,58 @@ class _ContentPageState extends State<ContentPage> {
                   ),
                 )
               : _allContents.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.article_outlined,
-                            size: 64,
-                            color: Color(0xFFC3ADA7),
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            'Belum ada konten',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF3E2F2B),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _isPremium 
-                                ? 'Konten akan segera ditambahkan'
-                                : 'Upgrade ke premium untuk akses lebih banyak konten',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF6D5B56),
-                            ),
-                          ),
-                          if (!_isPremium) ...[
-                            const SizedBox(height: 24),
-                            ElevatedButton(
-                              onPressed: _navigateToPremium,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFF8A65),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
+                  ? RefreshIndicator(
+                      onRefresh: _loadData,
+                      color: const Color(0xFFFF8A65),
+                      child: CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          SliverFillRemaining(
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.article_outlined,
+                                    size: 64,
+                                    color: Color(0xFFC3ADA7),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const Text(
+                                    'Belum ada konten',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF3E2F2B),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    _isPremium 
+                                        ? 'Konten akan segera ditambahkan'
+                                        : 'Upgrade ke premium untuk akses lebih banyak konten',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFF6D5B56),
+                                    ),
+                                  ),
+                                  if (!_isPremium) ...[
+                                    const SizedBox(height: 24),
+                                    ElevatedButton(
+                                      onPressed: _navigateToPremium,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFFFF8A65),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(30),
+                                        ),
+                                      ),
+                                      child: const Text('Lihat Paket Premium'),
+                                    ),
+                                  ],
+                                ],
                               ),
-                              child: const Text('Lihat Paket Premium'),
                             ),
-                          ],
+                          ),
                         ],
                       ),
                     )
