@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../widgets/youtube_player.dart';
 
 class DetailContentPage extends StatelessWidget {
   final Map<String, dynamic> content;
@@ -36,24 +36,27 @@ class DetailContentPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Hero Image / Thumbnail
-            Container(
-              width: double.infinity,
-              height: 250,
-              decoration: BoxDecoration(
-                color: categoryBgColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+            if (content['type'] == 'VIDEO' && content['video_url'] != null)
+              YoutubePlayer(url: content['video_url'])
+            else
+              Container(
+                width: double.infinity,
+                height: 250,
+                decoration: BoxDecoration(
+                  color: categoryBgColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                child: Center(
+                  child: Icon(
+                    content['typeIcon'],
+                    color: categoryColor.withValues(alpha: 0.4),
+                    size: 80,
+                  ),
                 ),
               ),
-              child: Center(
-                child: Icon(
-                  content['typeIcon'],
-                  color: categoryColor.withValues(alpha: 0.4),
-                  size: 80,
-                ),
-              ),
-            ),
             
             Padding(
               padding: const EdgeInsets.all(24),
@@ -108,44 +111,7 @@ class DetailContentPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   
-                  // Action Button (jika video)
-                  
-                  if (content['type'] == 'VIDEO')
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          final videoUrl = content['video_url'] as String?;
-                          if (videoUrl != null && videoUrl.isNotEmpty) {
-                            launchUrl(Uri.parse(videoUrl), mode: LaunchMode.externalApplication);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('URL video tidak tersedia'),
-                                backgroundColor: Color(0xFFFF8A65),
-                              ),
-                            );
-                          }
-                        },
-                        icon: const Icon(Icons.play_circle_filled, size: 24),
-                        label: const Text(
-                          'Tonton Video',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: categoryColor,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 0,
-                        ),
-                      ),
-                    ),
+
                 ],
               ),
             ),
