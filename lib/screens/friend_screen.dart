@@ -696,24 +696,7 @@ void _sendMessage(FriendModel friend) {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (friend.isPremium)
-                      Container(
-                        margin: const EdgeInsets.only(left: 6),
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFF8A65).withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFFF8A65)),
-                        ),
-                        child: const Text(
-                          'PREMIUM',
-                          style: TextStyle(
-                            fontSize: 6,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFFFF8A65),
-                          ),
-                        ),
-                      ),
+
                   ],
                 ),
                 const SizedBox(height: 6),
@@ -747,18 +730,15 @@ void _sendMessage(FriendModel friend) {
           GestureDetector(
             onTap: () => _sendMessage(friend),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFFF8A65),
-                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xFFFF8A65).withValues(alpha: 0.1),
+                shape: BoxShape.circle,
               ),
-              child: const Text(
-                'Kirim Pesan',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
+              child: const Icon(
+                Icons.chat_bubble_outline,
+                color: Color(0xFFFF8A65),
+                size: 18,
               ),
             ),
           ),
@@ -876,24 +856,7 @@ void _sendMessage(FriendModel friend) {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (request.isPremium)
-                      Container(
-                        margin: const EdgeInsets.only(left: 6),
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFF8A65).withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFFF8A65)),
-                        ),
-                        child: const Text(
-                          'PREMIUM',
-                          style: TextStyle(
-                            fontSize: 6,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFFFF8A65),
-                          ),
-                        ),
-                      ),
+
                   ],
                 ),
                 const SizedBox(height: 4),

@@ -11,8 +11,6 @@ class PrivacySettingsPage extends StatefulWidget {
 class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
   final ApiService _apiService = ApiService();
   
-  bool _showOnlineStatus = true;
-  bool _showLastSeen = true;
   bool _showMoodHistory = true;
   bool _allowFriendRequests = true;
   bool _isLoading = true;
@@ -36,8 +34,6 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
         final data = result['data'];
         final privacy = data['privacy'] ?? {};
         setState(() {
-          _showOnlineStatus = privacy['show_active'] ?? true;
-          _showLastSeen = privacy['show_last_seen'] ?? true;
           _showMoodHistory = privacy['show_mood'] ?? true;
           _allowFriendRequests = privacy['allow_requests'] ?? true;
           _isLoading = false;
@@ -128,96 +124,7 @@ class _PrivacySettingsPageState extends State<PrivacySettingsPage> {
                     children: [
                       const SizedBox(height: 16),
                       
-                      // Header section
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                        child: const Text(
-                          'Pengaturan Visibilitas',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFFFF8A65),
-                          ),
-                        ),
-                      ),
-                      
-                      // Switch 1: Online Status
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFFE0E0E0).withValues(alpha: 0.3),
-                          ),
-                        ),
-                        child: SwitchListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                          secondary: Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFF8A65).withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: const Icon(Icons.circle, color: Color(0xFFFF8A65), size: 22),
-                          ),
-                          title: const Text(
-                            'Status Online',
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF3E2F2B)),
-                          ),
-                          subtitle: const Text(
-                            'Tunjukkan status online Anda kepada teman',
-                            style: TextStyle(fontSize: 11, color: Color(0xFF6D5B56)),
-                          ),
-                          value: _showOnlineStatus,
-                          onChanged: (value) {
-                            setState(() => _showOnlineStatus = value);
-                            _savePrivacySetting('show_active', value);
-                          },
-                          activeColor: const Color(0xFFFF8A65),
-                        ),
-                      ),
-                      
-                      // Switch 2: Last Seen
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFFE0E0E0).withValues(alpha: 0.3),
-                          ),
-                        ),
-                        child: SwitchListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                          secondary: Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFF8A65).withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: const Icon(Icons.access_time, color: Color(0xFFFF8A65), size: 22),
-                          ),
-                          title: const Text(
-                            'Terakhir Dilihat',
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF3E2F2B)),
-                          ),
-                          subtitle: const Text(
-                            'Tampilkan waktu terakhir Anda aktif',
-                            style: TextStyle(fontSize: 11, color: Color(0xFF6D5B56)),
-                          ),
-                          value: _showLastSeen,
-                          onChanged: (value) {
-                            setState(() => _showLastSeen = value);
-                            _savePrivacySetting('show_last_seen', value);
-                          },
-                          activeColor: const Color(0xFFFF8A65),
-                        ),
-                      ),
-                      
-                      const SizedBox(height: 16),
+
                       
                       // Header section 2
                       Container(
