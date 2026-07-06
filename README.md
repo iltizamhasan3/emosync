@@ -68,7 +68,6 @@
 |-------|-----------|
 | 🔔 Notifikasi | Atur pengingat harian, laporan mingguan |
 | 🔒 Privasi | Kontrol visibilitas mood & aktivitas |
-| 🆘 Bantuan & Dukungan | Pusat bantuan dan kontak support |
 
 ### 🧘 Fitur Kesehatan Tambahan
 | Fitur | Deskripsi |
