@@ -21,7 +21,7 @@ class MoodCheckinModel {
       pemicus: json['pemicus'] != null 
           ? List<String>.from(json['pemicus'].map((p) => p['nama']))
           : [],
-      createdAt: DateTime.parse(json['created_at']),
+      createdAt: DateTime.parse(json['created_at']).toLocal(),
     );
   }
 }
