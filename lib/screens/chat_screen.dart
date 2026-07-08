@@ -499,19 +499,6 @@ class _ChatScreenState extends State<ChatScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.notifications_off, color: Color(0xFF6D5B56)),
-                title: const Text('Matikan Notifikasi'),
-                onTap: () {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Notifikasi dimatikan'),
-                      backgroundColor: Color(0xFFFF8A65),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.block, color: Color(0xFFA83836)),
                 title: const Text('Blokir Pengguna', style: TextStyle(color: Color(0xFFA83836))),
                 onTap: () {

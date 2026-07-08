@@ -6,7 +6,6 @@ import '../services/api_service.dart';
 import 'login_screen.dart';
 import 'home_screen.dart';
 import 'premium_plan_screen.dart';
-import 'settings_notifications_screen.dart';
 import 'settings_privacy_screen.dart';
 import 'settings_help_screen.dart';
 import 'edit_profile_screen.dart';
@@ -724,17 +723,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const SizedBox(height: 12),
         
-        _buildMenuItem(
-          icon: Icons.notifications_outlined,
-          title: 'Notifikasi',
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const NotificationsSettingsPage()),
-            );
-          },
-        ),
-        const SizedBox(height: 8),
         _buildMenuItem(
           icon: Icons.lock_outline,
           title: 'Privasi',

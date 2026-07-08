@@ -12,8 +12,6 @@ class ApiConstants {
   
   // ============ PROFILE ENDPOINTS ============
   static const String profile = '/profile';
-  static const String deviceTokens = '/device-tokens';
-  
   // ============ REPORT ENDPOINTS ============
   static const String reportsWeekly = '/reports/weekly';
   
@@ -38,7 +36,6 @@ class ApiConstants {
   
   // ============ SETTINGS ENDPOINTS ============
   static const String settings = '/settings';
-  static const String settingsNotification = '/settings/notification';
   static const String settingsPrivacy = '/settings/privacy';
   
   // ============ CHAT ENDPOINTS ============

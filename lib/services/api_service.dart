@@ -319,24 +319,6 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> updateDeviceToken(String fcmToken) async {
-    try {
-      final headers = await _getHeaders();
-      final response = await http.post(
-        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.deviceTokens}'),
-        headers: headers,
-        body: json.encode({
-          'device_token': fcmToken,
-        }),
-      ).timeout(_timeout);
-
-      return _handleResponse(response);
-    } catch (e) {
-      if (kDebugMode) debugPrint('❌ UpdateDeviceToken error: $e');
-      return {'success': false, 'message': 'Gagal memperbarui device token'};
-    }
-  }
-
   // ============ PEMICU ============
   Future<Map<String, dynamic>> getPemicu() async {
     if (_pendingRequests.containsKey('pemicu')) {
@@ -1023,22 +1005,6 @@ Future<Map<String, dynamic>> markMessagesAsRead(int friendId) async {
     } catch (e) {
       if (kDebugMode) debugPrint('❌ GetSettings error: $e');
       return {'success': false, 'message': 'Gagal mengambil pengaturan'};
-    }
-  }
-
-  Future<Map<String, dynamic>> updateNotificationSettings(Map<String, dynamic> settings) async {
-    try {
-      final headers = await _getHeaders();
-      final response = await http.put(
-        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.settingsNotification}'),
-        headers: headers,
-        body: json.encode(settings),
-      ).timeout(_timeout);
-
-      return _handleResponse(response);
-    } catch (e) {
-      if (kDebugMode) debugPrint('❌ UpdateNotificationSettings error: $e');
-      return {'success': false, 'message': 'Gagal menyimpan pengaturan notifikasi'};
     }
   }
 
