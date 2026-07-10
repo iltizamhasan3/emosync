@@ -21,14 +21,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ApiService _apiService = ApiService();
-  
+
   int _currentIndex = 0;
   bool _hasCheckedIn = false;
   MoodType _todayMood = MoodType.netral;
   String _userName = '';
   int _streak = 0;
   bool _isLoading = true;
-  
+  bool _hasShownWelcome = false;
+
   List<Map<String, dynamic>> _weeklyData = [];
   Map<String, int> _moodDistribution = {};
 
@@ -36,6 +37,89 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showWelcomePopup());
+  }
+
+  void _showWelcomePopup() {
+    // Tunggu 1 detik biar konten lain sempet render dulu
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (!mounted || _hasShownWelcome) return;
+      _hasShownWelcome = true;
+
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withValues(alpha: 0.15),
+        builder: (ctx) => PopScope(
+          canPop: false,
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 50),
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 40,
+                    offset: const Offset(0, 15),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFFF8A65), Color(0xFFFFAB91)],
+                      ),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: const Icon(
+                      Icons.bubble_chart,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Selamat Datang,\n$_userName!',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF3E2F2B),
+                      height: 1.3,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Siap menyelaraskan\nperasaanmu hari ini?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.4,
+                      color: Color(0xFF6D5B56),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Auto-dismiss setelah 3 detik
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      });
+    });
   }
 
   void _updateDashboardState(DashboardModel dashboard) {

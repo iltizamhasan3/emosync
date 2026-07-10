@@ -19,10 +19,112 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showColdStartPopup());
+  }
+
+  @override
   void dispose() {
     _emailOrUsernameController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _showColdStartPopup() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withValues(alpha: 0.2),
+      builder: (ctx) => PopScope(
+        canPop: false,
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 30,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF3E0),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.info_outline,
+                    color: Color(0xFFFF8A65),
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Server mungkin butuh\n30-60 detik',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF3E2F2B),
+                    height: 1.3,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Karena menggunakan server gratis,\nserver akan tidur jika 15 menit tidak ada\naktivitas. Harap tunggu sebentar.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.5,
+                    color: Color(0xFF6D5B56),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFF3E0),
+                      foregroundColor: const Color(0xFFFF8A65),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: const Text(
+                      'Mengerti',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Auto-dismiss setelah 5 detik
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   Future<void> _handleLogin() async {
@@ -124,9 +226,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              // ⚠️ Info server cold start Render
-              _buildRenderInfoBanner(),
-              const SizedBox(height: 24),
+              // Info server Render lewat pop-up otomatis
+              const SizedBox(height: 40),
 
               // Email/Username Field
               _buildTextField(
@@ -208,54 +309,6 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  /// Info banner tentang cold start Render (server free tier)
-  Widget _buildRenderInfoBanner() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF3E0),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFFFD180)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.info_outline,
-            color: Color(0xFFFF8A65),
-            size: 20,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Server mungkin butuh 30-60 detik',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF5D4037),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Karena menggunakan server gratis, jika tidak ada aktivitas selama 15 menit server akan tidur. '
-                  'Tunggu sebentar saat pertama kali mengakses fitur.',
-                  style: TextStyle(
-                    fontSize: 11,
-                    height: 1.4,
-                    color: const Color(0xFF795548),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
