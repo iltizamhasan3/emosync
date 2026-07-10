@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
-import 'login_screen.dart';
-import '../services/local_storage_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -25,115 +23,12 @@ class _RegisterPageState extends State<RegisterPage> {
   String _emailError = '';
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _showColdStartPopup());
-  }
-
-  @override
   void dispose() {
     _nameController.dispose();
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  void _showColdStartPopup() {
-    if (!mounted) return;
-    final dialogContext = context;
-    showDialog(
-      context: dialogContext,
-      barrierDismissible: false,
-      barrierColor: Colors.black.withValues(alpha: 0.2),
-      builder: (ctx) {
-        // Auto-dismiss setelah 5 detik pake ctx (bukan context)
-        Future.delayed(const Duration(seconds: 5), () {
-          if (ctx.mounted) Navigator.of(ctx).pop();
-        });
-        return PopScope(
-          canPop: false,
-          child: Center(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 40),
-              padding: const EdgeInsets.all(28),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 30,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF3E0),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.info_outline,
-                      color: Color(0xFFFF8A65),
-                      size: 28,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Server mungkin butuh\n30-60 detik',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF3E2F2B),
-                      height: 1.3,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Karena menggunakan server gratis,\nserver akan tidur jika 15 menit tidak ada\naktivitas. Harap tunggu sebentar.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      height: 1.5,
-                      color: Color(0xFF6D5B56),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(),
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFF3E0),
-                        foregroundColor: const Color(0xFFFF8A65),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: const Text(
-                        'Mengerti',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   bool _isUsernameValid(String username) {
