@@ -124,7 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              // ⚠️ Info server cold start Render
+              _buildRenderInfoBanner(),
+              const SizedBox(height: 24),
 
               // Email/Username Field
               _buildTextField(
@@ -206,6 +208,54 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Info banner tentang cold start Render (server free tier)
+  Widget _buildRenderInfoBanner() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF3E0),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFFFD180)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.info_outline,
+            color: Color(0xFFFF8A65),
+            size: 20,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Server mungkin butuh 30-60 detik',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF5D4037),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Karena menggunakan server gratis, jika tidak ada aktivitas selama 15 menit server akan tidur. '
+                  'Tunggu sebentar saat pertama kali mengakses fitur.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    height: 1.4,
+                    color: const Color(0xFF795548),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

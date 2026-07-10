@@ -16,7 +16,8 @@ class ApiService {
   factory ApiService() => _instance;
   ApiService._internal();
 
-  static const Duration _timeout = Duration(seconds: 30);
+  // 60 detik karena Render free tier cold start butuh ~30-60 detik
+  static const Duration _timeout = Duration(seconds: 60);
 
   String? _cachedToken;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();

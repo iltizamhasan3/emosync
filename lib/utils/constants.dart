@@ -1,7 +1,7 @@
 class ApiConstants {
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8000/api',
+    defaultValue: 'https://emosync-api.onrender.com/api',
   );
   
   // ============ AUTH ENDPOINTS ============
@@ -54,6 +54,7 @@ class ApiConstants {
   static const String paymentHistory = '/payment/history';
   
   // ============ TIMEOUTS ============
-  static const int connectionTimeout = 30;
-  static const int receiveTimeout = 30;
+  // Ditingkatkan jadi 60 detik karena Render free tier bisa cold start (15 menit idle)
+  static const int connectionTimeout = 60;
+  static const int receiveTimeout = 60;
 }
