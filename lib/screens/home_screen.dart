@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   String _userName = '';
   int _streak = 0;
   bool _isLoading = true;
-  bool _hasShownWelcome = false;
 
   List<Map<String, dynamic>> _weeklyData = [];
   Map<String, int> _moodDistribution = {};
@@ -37,33 +36,34 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadData();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _showWelcomePopup());
   }
 
-  void _showWelcomePopup() {
-    // Tunggu 1 detik biar konten lain sempet render dulu
-    Future.delayed(const Duration(milliseconds: 800), () {
-      if (!mounted || _hasShownWelcome) return;
-      _hasShownWelcome = true;
-
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        barrierColor: Colors.black.withValues(alpha: 0.15),
-        builder: (ctx) => PopScope(
+  void _showColdStartPopup() {
+    if (!mounted) return;
+    final dialogContext = context;
+    showDialog(
+      context: dialogContext,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withValues(alpha: 0.2),
+      builder: (ctx) {
+        // Auto-dismiss setelah 5 detik
+        Future.delayed(const Duration(seconds: 5), () {
+          if (ctx.mounted) Navigator.of(ctx).pop();
+        });
+        return PopScope(
           canPop: false,
           child: Center(
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 50),
-              padding: const EdgeInsets.all(32),
+              margin: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 40,
-                    offset: const Offset(0, 15),
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 30,
+                    offset: const Offset(0, 10),
                   ),
                 ],
               ),
@@ -71,55 +71,68 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 64,
-                    height: 64,
+                    width: 56,
+                    height: 56,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFFF8A65), Color(0xFFFFAB91)],
-                      ),
-                      borderRadius: BorderRadius.circular(18),
+                      color: const Color(0xFFFFF3E0),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(
-                      Icons.bubble_chart,
-                      color: Colors.white,
-                      size: 32,
+                      Icons.info_outline,
+                      color: Color(0xFFFF8A65),
+                      size: 28,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    'Selamat Datang,\n$_userName!',
+                  const Text(
+                    'Server mungkin butuh\n30-60 detik',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF3E2F2B),
                       height: 1.3,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
                   const Text(
-                    'Siap menyelaraskan\nperasaanmu hari ini?',
+                    'Karena menggunakan server gratis,\nserver akan tidur jika 15 menit tidak ada\naktivitas. Harap tunggu sebentar.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 14,
-                      height: 1.4,
+                      fontSize: 13,
+                      height: 1.5,
                       color: Color(0xFF6D5B56),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFF3E0),
+                        foregroundColor: const Color(0xFFFF8A65),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        'Mengerti',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      );
-
-      // Auto-dismiss setelah 3 detik
-      Future.delayed(const Duration(seconds: 3), () {
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
-      });
-    });
+        );
+      },
+    );
   }
 
   void _updateDashboardState(DashboardModel dashboard) {
@@ -261,6 +274,8 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           _isLoading = false;
         });
+        // Tampilkan popup cold start setelah data selesai loading
+        WidgetsBinding.instance.addPostFrameCallback((_) => _showColdStartPopup());
       }
     }
   }
